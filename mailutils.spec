@@ -213,5 +213,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/popauth.1*
 
 %files -n gnu-imap4d
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/imap4d
 %{_mandir}/man1/imap4d.1*
