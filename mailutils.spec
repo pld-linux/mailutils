@@ -11,12 +11,13 @@
 Summary:	GNU mail utilities
 Summary(pl):	Narzêdzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	0.4
+Version:	0.5
 Release:	0.1
 License:	GPL
 Group:		Applications/Mail
-Source0:	ftp://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.bz2
-# Source0-md5:	fbab7ff66f9518b64d8b35d4b562ddf3
+Source0:	ftp://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
+# Source0-md5:	e61b0520eb33d5f155ebb0224bb332a8
+Patch0:		%{name}-info.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	gnutls-devel
 BuildRequires:	guile-devel >= 1.4
@@ -25,9 +26,10 @@ BuildRequires:	guile-devel >= 1.4
 BuildRequires:	libltdl-devel
 BuildRequires:	pam-devel
 BuildRequires:	readline-devel
-Requires:	%{name}-libs = %{version}
-BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+BuildRequires:	texinfo
+Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	mailutils-doc
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libexecdir	%{_sbindir}
 
@@ -61,7 +63,7 @@ Summary:	Header files for GNU mail utilities libraries
 Summary(pl):	Pliki nag³ówkowe bibliotek narzêdzi pocztowych GNU
 License:	LGPL
 Group:		Development/Libraries
-Requires:	%{name}-libs = %{version}
+Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	libmailbox-dev
 
 %description devel
@@ -75,7 +77,7 @@ Summary:	GNU mail utilities static libraries
 Summary(pl):	Statyczne biblioteki narzêdzi pocztowych GNU
 License:	LGPL
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}
+Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 GNU mail utilities static libraries.
@@ -87,7 +89,7 @@ Statyczne biblioteki narzêdzi pocztowych GNU.
 Summary:	GNU mail utilities mail(x) replacement
 Summary(pl):	Zamiennik mail(x) z narzêdzi pocztowych GNU
 Group:		Applications/Mail
-Requires:	%{name} = %{version}
+Requires:	%{name} = %{version}-%{release}
 
 %description -n gnu-mail
 A replacement for /bin/mail(x) conforming to the UNIX98 specification
@@ -100,7 +102,7 @@ Zamiennik /bin/mail(x) zgodny ze specyfikacj± UNIX98 dla mailx.
 Summary:	GNU mail utilites POP3 daemon
 Summary(pl):	Demon POP3 z narzêdzi pocztowych GNU
 Group:		Networking/Daemons
-Requires:	%{name}-libs = %{version}
+Requires:	%{name}-libs = %{version}-%{release}
 # inetd or standalone
 
 %description -n gnu-pop3d
@@ -115,7 +117,7 @@ skrzynek pocztowych.
 Summary:	GNU mail utilities IMAP4 daemon
 Summary(pl):	Demon IMAP4 z narzêdzi pocztowych GNU
 Group:		Networking/Daemons
-Requires:	%{name}-libs = %{version}
+Requires:	%{name}-libs = %{version}-%{release}
 # inetd or standalone
 
 %description -n gnu-imap4d
@@ -128,6 +130,7 @@ skrzynek pocztowych.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %configure \
@@ -148,13 +151,19 @@ rm -rf $RPM_BUILD_ROOT
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	libs -p /sbin/ldconfig
-%postun	libs -p /sbin/ldconfig
-
 %post
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir %{_infodir} >/dev/null 2>&1
 
 %postun
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir %{_infodir} >/dev/null 2>&1
+
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
+
+%post devel
+[ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir %{_infodir} >/dev/null 2>&1
+
+%postun devel
 [ ! -x /usr/sbin/fix-info-dir ] || /usr/sbin/fix-info-dir %{_infodir} >/dev/null 2>&1
 
 %files -f %{name}.lang
@@ -165,6 +174,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/from
 %attr(755,root,root) %{_bindir}/guimb
 %attr(755,root,root) %{_bindir}/messages
+%attr(755,root,root) %{_bindir}/movemail
 %attr(755,root,root) %{_bindir}/readmsg
 %attr(755,root,root) %{_bindir}/sieve
 %attr(755,root,root) %{_bindir}/sieve.scm
@@ -173,7 +183,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/mail.remote
 %dir %{_libdir}/mailutils
 %{_datadir}/mailutils
-%{_infodir}/*.info*
+%{_infodir}/mailutils.info*
 
 %files libs
 %defattr(644,root,root,755)
@@ -185,6 +195,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
 %{_includedir}/mailutils
+%{_infodir}/muint.info*
 
 %files static
 %defattr(644,root,root,755)
@@ -193,6 +204,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -n gnu-mail
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mail
+%{_mandir}/man1/mail.1*
 
 %files -n gnu-pop3d
 %defattr(644,root,root,755)
