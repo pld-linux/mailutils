@@ -7,13 +7,12 @@
 Summary:	GNU mail utilities
 Summary(pl):	Narzêdzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	0.3
+Version:	0.3.1
 Release:	0.1
 License:	GPL
 Group:		Applications/Mail
 Source0:	ftp://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.bz2
-# Source0-md5:	aee94ecf176fb6cc9ab5532a2864a1c1
-Patch0:		%{name}-gcc33.patch
+# Source0-md5:	d2f0192b3dd95b33e764a0d480085cdd
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	gnutls-devel
 BuildRequires:	guile-devel >= 1.4
@@ -123,7 +122,6 @@ skrzynek pocztowych.
 
 %prep
 %setup -q
-%patch -p1
 
 %build
 %configure \
