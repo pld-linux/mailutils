@@ -11,7 +11,7 @@ Version:	0.3
 Release:	0.1
 License:	GPL
 Group:		Applications/Mail
-Source0:	ftp://ftp.gnu.org/pub/%{name}/%{name}-%{version}.tar.bz2
+Source0:	ftp://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.bz2
 # Source0-md5:	aee94ecf176fb6cc9ab5532a2864a1c1
 Patch0:		%{name}-gcc33.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
