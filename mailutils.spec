@@ -93,7 +93,7 @@ Requires:	%{name} = %{version}
 A replacement for /bin/mail(x) conforming to the UNIX98 specification
 for mailx.
 
-%description -n gnu-mail
+%description -n gnu-mail -l pl
 Zamiennik /bin/mail(x) zgodny ze specyfikacj± UNIX98 dla mailx.
 
 %package -n gnu-pop3d
@@ -107,7 +107,7 @@ Requires:	%{name}-libs = %{version}
 The GNU POP3 daemon. Uses libmailbox to support different styles of
 mailboxes.
 
-%description -n gnu-pop3d
+%description -n gnu-pop3d -l pl
 Demon GNU POP3. Wykorzystuje libmailbox do obs³ugi ró¿nych rodzajów
 skrzynek pocztowych.
 
