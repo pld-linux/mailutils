@@ -1,9 +1,13 @@
 # TODO:
 # - look at files in main package (more split?)
 # - scripts for daemons
-# - gsasl >= 0.0.2 (GNU SASL)
-# - optional gssapi?
+# - check optional gssapi (or maybe use gss?)
 # - some dbm (gdbm? db as (n)dbm? db after update from db2 to db4.1 API?)
+#
+# Conditional build:
+%bcond_with	gssapi	# use GSSAPI authentication (krb5 or heimdal; not ready for gss)
+%bcond_without	sasl	# without SASL (using GNU SASL)
+#
 Summary:	GNU mail utilities
 Summary(pl):	Narzêdzia pocztowe z projektu GNU
 Name:		mailutils
@@ -16,6 +20,8 @@ Source0:	ftp://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.bz2
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	gnutls-devel
 BuildRequires:	guile-devel >= 1.4
+%{?with_gss:BuildRequires:	heimdal-devel}
+%{?with_sasl:BuildRequires:	libgsasl-devel >= 0.0.2}
 BuildRequires:	libltdl-devel
 BuildRequires:	pam-devel
 BuildRequires:	readline-devel
@@ -125,7 +131,9 @@ skrzynek pocztowych.
 
 %build
 %configure \
-	--with-gnutls
+	--with-gnutls \
+	%{?with_sasl:--with-gsasl} \
+	%{?with_gssapi:--with-gssapi}
 
 %{__make}
 
