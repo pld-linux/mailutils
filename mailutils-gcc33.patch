@@ -1,0 +1,15 @@
+--- mailutils-0.3/mailbox/mu_auth.c.orig	2003-02-10 09:45:57.000000000 +0100
++++ mailutils-0.3/mailbox/mu_auth.c	2003-07-26 16:19:13.000000000 +0200
+@@ -82,9 +82,9 @@
+   p = (char *)(*ptr + 1);
+   
+ #define COPY(f) \
+-  (*ptr)->##f = p; \
+-  strcpy (p, ##f); \
+-  p += strlen (##f) + 1
++  (*ptr)->f = p; \
++  strcpy (p, f); \
++  p += strlen (f) + 1
+   
+   COPY (name);
+   COPY (passwd);
