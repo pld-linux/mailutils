@@ -1,0 +1,51 @@
+--- mailutils-0.5/doc/texinfo/mailutils.texi.orig	2004-04-27 13:32:47.000000000 +0200
++++ mailutils-0.5/doc/texinfo/mailutils.texi	2004-07-04 00:37:12.538498704 +0200
+@@ -21,22 +21,19 @@
+ @syncodeindex tp fn
+ 
+ @ifinfo
+-@dircategory Email
++@dircategory Net utilities:
+ @direntry
+-* Mailutils: (mailutils).       Utilities & library for mailboxes, protocols.
+-@end direntry
+-@dircategory Individual utilities
+-@direntry
+-* comsatd: (mailutils)comsatd.                  Comsat daemon.
+-* frm: (mailutils)frm.                          List headers from a mailbox.
+-* guimb: (mailutils)guimb.                      Mailbox processing language.
+-* imap4d: (mailutils)imap4d.                    IMAP4 daemon.
+-* mail.local: (mailutils)mail.local.            Deliver mail to local mailbox.
+-* mail: (mailutils)mail.                        Send and receive mail.
+-* messages: (mailutils)messages.                Count messages in mailbox.
+-* pop3d: (mailutils)pop3d.                      POP3 daemon.
+-* readmsg: (mailutils)readmsg.                  Extract messages from a folder.
+-* sieve: (mailutils)sieve.                      Mail filtering utility.
++* Mailutils: (mailutils).		Utilities & library for mailboxes, protocols
++* comsatd: (mailutils)comsatd.		Comsat daemon
++* frm: (mailutils)frm.			List headers from a mailbox
++* guimb: (mailutils)guimb.		Mailbox processing language
++* imap4d: (mailutils)imap4d.		IMAP4 daemon
++* mail.local: (mailutils)mail.local.	Deliver mail to local mailbox
++* mail: (mailutils)mail.		Send and receive mail
++* messages: (mailutils)messages.	Count messages in mailbox
++* pop3d: (mailutils)pop3d.		POP3 daemon
++* readmsg: (mailutils)readmsg.		Extract messages from a folder
++* sieve: (mailutils)sieve.		Mail filtering utility
+ @end direntry
+ @end ifinfo
+ 
+--- mailutils-0.5/doc/texinfo/muint.texi.orig	2004-06-27 14:56:53.000000000 +0200
++++ mailutils-0.5/doc/texinfo/muint.texi	2004-07-04 00:37:40.693218536 +0200
+@@ -9,9 +9,9 @@
+ @include version.texi
+ 
+ @ifinfo
+-@dircategory GNU libraries
++@dircategory Libraries:
+ @direntry
+-* mailutils-int: (muint).  The internals of GNU Mailutils.
++* mailutils-int: (muint).		The internals of GNU Mailutils
+ @end direntry
+ @end ifinfo
+ 
