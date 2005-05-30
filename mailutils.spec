@@ -12,12 +12,13 @@
 Summary:	GNU mail utilities
 Summary(pl):	Narzêdzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	0.6
-Release:	0.1
+Version:	0.6.90
+Release:	0.2
 License:	GPL
 Group:		Applications/Mail
-Source0:	ftp://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
-# Source0-md5:	13e38442893a24f16798e4b5f634ba7d
+#Source0:	ftp://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
+Source0:	ftp://alpha.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
+# Source0-md5:	682099acd143479aff2ed9e80f214ad6
 Patch0:		%{name}-info.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	gnutls-devel
