@@ -4,6 +4,7 @@
 # - check optional gssapi (or maybe use gss?)
 # - some dbm (gdbm? db as (n)dbm? db after update from db2 to db4.1 API?)
 # - security http://security.gentoo.org/glsa/glsa-200505-20.xml
+# - security http://security.gentoo.org/glsa/glsa-200506-02.xml
 #
 # Conditional build:
 %bcond_with	gssapi	# use GSSAPI authentication (krb5 or heimdal; not ready for gss)
