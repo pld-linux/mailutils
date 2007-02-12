@@ -11,7 +11,7 @@
 %bcond_without	sasl	# without SASL (using GNU SASL)
 #
 Summary:	GNU mail utilities
-Summary(pl):	Narzêdzia pocztowe z projektu GNU
+Summary(pl.UTF-8):   NarzÄ™dzia pocztowe z projektu GNU
 Name:		mailutils
 Version:	0.6.90
 Release:	3
@@ -39,12 +39,12 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 GNU mail utilities.
 
-%description -l pl
-Narzêdzia pocztowe z projektu GNU
+%description -l pl.UTF-8
+NarzÄ™dzia pocztowe z projektu GNU
 
 %package libs
 Summary:	GNU mail utilities libraries
-Summary(pl):	Biblioteka narzêdzi pocztowych GNU
+Summary(pl.UTF-8):   Biblioteka narzÄ™dzi pocztowych GNU
 License:	LGPL
 Group:		Libraries
 Obsoletes:	libmailbox
@@ -55,15 +55,15 @@ access routines and support for a number of mailbox types, such as
 mbox, mh, POP3, and IMAP4. It also support mime message handling, and
 sending mail via SMTP and /usr/sbin/sendmail.
 
-%description libs -l pl
-Biblioteka libmailbox zawiera ró¿ne funkcje dostêpu do skrzynek
-pocztowych obs³uguj±ce wiele typów skrzynek, takich jak mbox, mh, POP3
-i IMAP4. Wspiera tak¿e obs³ugê wiadomo¶ci MIME i wysy³anie poczty
+%description libs -l pl.UTF-8
+Biblioteka libmailbox zawiera rÃ³Å¼ne funkcje dostÄ™pu do skrzynek
+pocztowych obsÅ‚ugujÄ…ce wiele typÃ³w skrzynek, takich jak mbox, mh, POP3
+i IMAP4. Wspiera takÅ¼e obsÅ‚ugÄ™ wiadomoÅ›ci MIME i wysyÅ‚anie poczty
 przez SMP oraz /usr/sbin/sendmail.
 
 %package devel
 Summary:	Header files for GNU mail utilities libraries
-Summary(pl):	Pliki nag³ówkowe bibliotek narzêdzi pocztowych GNU
+Summary(pl.UTF-8):   Pliki nagÅ‚Ã³wkowe bibliotek narzÄ™dzi pocztowych GNU
 License:	LGPL
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
@@ -72,12 +72,12 @@ Obsoletes:	libmailbox-dev
 %description devel
 Header files for GNU mail utilities libraries.
 
-%description devel -l pl
-Pliki nag³ówkowe bibliotek narzêdzi pocztowych GNU.
+%description devel -l pl.UTF-8
+Pliki nagÅ‚Ã³wkowe bibliotek narzÄ™dzi pocztowych GNU.
 
 %package static
 Summary:	GNU mail utilities static libraries
-Summary(pl):	Statyczne biblioteki narzêdzi pocztowych GNU
+Summary(pl.UTF-8):   Statyczne biblioteki narzÄ™dzi pocztowych GNU
 License:	LGPL
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
@@ -85,12 +85,12 @@ Requires:	%{name}-devel = %{version}-%{release}
 %description static
 GNU mail utilities static libraries.
 
-%description static -l pl
-Statyczne biblioteki narzêdzi pocztowych GNU.
+%description static -l pl.UTF-8
+Statyczne biblioteki narzÄ™dzi pocztowych GNU.
 
 %package -n gnu-mail
 Summary:	GNU mail utilities mail(x) replacement
-Summary(pl):	Zamiennik mail(x) z narzêdzi pocztowych GNU
+Summary(pl.UTF-8):   Zamiennik mail(x) z narzÄ™dzi pocztowych GNU
 Group:		Applications/Mail
 Requires:	%{name} = %{version}-%{release}
 
@@ -98,12 +98,12 @@ Requires:	%{name} = %{version}-%{release}
 A replacement for /bin/mail(x) conforming to the UNIX98 specification
 for mailx.
 
-%description -n gnu-mail -l pl
-Zamiennik /bin/mail(x) zgodny ze specyfikacj± UNIX98 dla mailx.
+%description -n gnu-mail -l pl.UTF-8
+Zamiennik /bin/mail(x) zgodny ze specyfikacjÄ… UNIX98 dla mailx.
 
 %package -n gnu-pop3d
 Summary:	GNU mail utilites POP3 daemon
-Summary(pl):	Demon POP3 z narzêdzi pocztowych GNU
+Summary(pl.UTF-8):   Demon POP3 z narzÄ™dzi pocztowych GNU
 Group:		Networking/Daemons
 Requires:	%{name}-libs = %{version}-%{release}
 # inetd or standalone
@@ -112,13 +112,13 @@ Requires:	%{name}-libs = %{version}-%{release}
 The GNU POP3 daemon. Uses libmailbox to support different styles of
 mailboxes.
 
-%description -n gnu-pop3d -l pl
-Demon GNU POP3. Wykorzystuje libmailbox do obs³ugi ró¿nych rodzajów
+%description -n gnu-pop3d -l pl.UTF-8
+Demon GNU POP3. Wykorzystuje libmailbox do obsÅ‚ugi rÃ³Å¼nych rodzajÃ³w
 skrzynek pocztowych.
 
 %package -n gnu-imap4d
 Summary:	GNU mail utilities IMAP4 daemon
-Summary(pl):	Demon IMAP4 z narzêdzi pocztowych GNU
+Summary(pl.UTF-8):   Demon IMAP4 z narzÄ™dzi pocztowych GNU
 Group:		Networking/Daemons
 Requires:	%{name}-libs = %{version}-%{release}
 # inetd or standalone
@@ -127,8 +127,8 @@ Requires:	%{name}-libs = %{version}-%{release}
 The GNU IMAP4 daemon. Uses libmailbox to support different styles of
 mailboxes.
 
-%description -n gnu-imap4d -l pl
-Demon GNU IMAP4. Wykorzystuje libmailbox do obs³ugi ró¿nych rodzajów
+%description -n gnu-imap4d -l pl.UTF-8
+Demon GNU IMAP4. Wykorzystuje libmailbox do obsÅ‚ugi rÃ³Å¼nych rodzajÃ³w
 skrzynek pocztowych.
 
 %prep
