@@ -11,7 +11,7 @@
 %bcond_without	sasl	# without SASL (using GNU SASL)
 #
 Summary:	GNU mail utilities
-Summary(pl.UTF-8):   Narzędzia pocztowe z projektu GNU
+Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
 Version:	0.6.90
 Release:	3
@@ -44,7 +44,7 @@ Narzędzia pocztowe z projektu GNU
 
 %package libs
 Summary:	GNU mail utilities libraries
-Summary(pl.UTF-8):   Biblioteka narzędzi pocztowych GNU
+Summary(pl.UTF-8):	Biblioteka narzędzi pocztowych GNU
 License:	LGPL
 Group:		Libraries
 Obsoletes:	libmailbox
@@ -63,7 +63,7 @@ przez SMP oraz /usr/sbin/sendmail.
 
 %package devel
 Summary:	Header files for GNU mail utilities libraries
-Summary(pl.UTF-8):   Pliki nagłówkowe bibliotek narzędzi pocztowych GNU
+Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek narzędzi pocztowych GNU
 License:	LGPL
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
@@ -77,7 +77,7 @@ Pliki nagłówkowe bibliotek narzędzi pocztowych GNU.
 
 %package static
 Summary:	GNU mail utilities static libraries
-Summary(pl.UTF-8):   Statyczne biblioteki narzędzi pocztowych GNU
+Summary(pl.UTF-8):	Statyczne biblioteki narzędzi pocztowych GNU
 License:	LGPL
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
@@ -90,7 +90,7 @@ Statyczne biblioteki narzędzi pocztowych GNU.
 
 %package -n gnu-mail
 Summary:	GNU mail utilities mail(x) replacement
-Summary(pl.UTF-8):   Zamiennik mail(x) z narzędzi pocztowych GNU
+Summary(pl.UTF-8):	Zamiennik mail(x) z narzędzi pocztowych GNU
 Group:		Applications/Mail
 Requires:	%{name} = %{version}-%{release}
 
@@ -103,7 +103,7 @@ Zamiennik /bin/mail(x) zgodny ze specyfikacją UNIX98 dla mailx.
 
 %package -n gnu-pop3d
 Summary:	GNU mail utilites POP3 daemon
-Summary(pl.UTF-8):   Demon POP3 z narzędzi pocztowych GNU
+Summary(pl.UTF-8):	Demon POP3 z narzędzi pocztowych GNU
 Group:		Networking/Daemons
 Requires:	%{name}-libs = %{version}-%{release}
 # inetd or standalone
@@ -118,7 +118,7 @@ skrzynek pocztowych.
 
 %package -n gnu-imap4d
 Summary:	GNU mail utilities IMAP4 daemon
-Summary(pl.UTF-8):   Demon IMAP4 z narzędzi pocztowych GNU
+Summary(pl.UTF-8):	Demon IMAP4 z narzędzi pocztowych GNU
 Group:		Networking/Daemons
 Requires:	%{name}-libs = %{version}-%{release}
 # inetd or standalone
