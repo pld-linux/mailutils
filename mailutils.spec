@@ -24,7 +24,7 @@ Patch0:		%{name}-info.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	gnutls-devel >= 1.2.5
 BuildRequires:	guile-devel >= 1.4
-%{?with_gss:BuildRequires:	krb5-devel}
+%{?with_gssapi:BuildRequires:	krb5-devel}
 %{?with_sasl:BuildRequires:	gsasl-devel >= 0.0.2}
 BuildRequires:	libltdl-devel
 BuildRequires:	pam-devel
