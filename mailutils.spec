@@ -7,29 +7,37 @@
 # - security http://security.gentoo.org/glsa/glsa-200506-02.xml
 #
 # Conditional build:
-%bcond_with	gssapi	# use GSSAPI authentication (krb5 or heimdal; not ready for gss)
+%bcond_without	gssapi	# GSSAPI authentication (krb5 or heimdal; not ready for gss)
 %bcond_without	sasl	# without SASL (using GNU SASL)
 #
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	0.6.90
-Release:	3
+Version:	1.2
+Release:	1
 License:	GPL
 Group:		Applications/Mail
-#Source0:	ftp://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
-Source0:	ftp://alpha.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
-# Source0-md5:	682099acd143479aff2ed9e80f214ad6
+Source0:	ftp://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
+# Source0-md5:	0a5bf84e908f15343414c6a95118a373
 Patch0:		%{name}-info.patch
+Patch1:		%{name}-tinfo.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	fribidi-devel
+BuildRequires:	gnu-radius-devel
 BuildRequires:	gnutls-devel >= 1.2.5
+%{?with_sasl:BuildRequires:	gsasl-devel >= 0.0.2}
 BuildRequires:	guile-devel >= 1.4
 %{?with_gssapi:BuildRequires:	krb5-devel}
-%{?with_sasl:BuildRequires:	gsasl-devel >= 0.0.2}
 BuildRequires:	libltdl-devel
+BuildRequires:	mysql-devel
+BuildRequires:	ncurses-devel
 BuildRequires:	pam-devel
+BuildRequires:	postgresql-devel
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
+BuildRequires:	unixODBC-devel
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	mailutils-doc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -133,11 +141,18 @@ skrzynek pocztowych.
 
 %prep
 %setup -q
-%patch0 -p1
+# do we still need these?
+# %patch0 -p1
+
+#%patch1 -p0
+sed -i -e 's#ncurses curses termcap#tinfo ncurses curses termcap#g' configure*
 
 %build
 %configure \
 	--with-gnutls \
+	--with-mysql \
+	--with-postgres \
+	--with-odbc=odbc \
 	%{?with_sasl:--with-gsasl} \
 	%{?with_gssapi:--with-gssapi}
 
@@ -177,6 +192,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/from
 %attr(755,root,root) %{_bindir}/guimb
 %attr(755,root,root) %{_bindir}/messages
+%attr(755,root,root) %{_bindir}/mimeview
 %attr(755,root,root) %{_bindir}/movemail
 %attr(755,root,root) %{_bindir}/readmsg
 %attr(755,root,root) %{_bindir}/sieve
@@ -185,6 +201,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/mail.local
 %attr(755,root,root) %{_libexecdir}/mail.remote
 %dir %{_libdir}/mailutils
+%attr(755,root,root) %{_libdir}/mailutils/*.so
 %{_datadir}/mailutils
 %{_infodir}/mailutils.info*
 
@@ -198,7 +215,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/lib*.la
 %{_includedir}/mailutils
-%{_infodir}/muint.info*
 
 %files static
 %defattr(644,root,root,755)
