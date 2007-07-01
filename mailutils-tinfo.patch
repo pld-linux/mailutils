@@ -1,0 +1,11 @@
+--- configure.ac.org	2007-07-01 21:46:02.419853883 +0200
++++ configure.ac	2007-07-01 21:46:10.886960054 +0200
+@@ -839,7 +839,7 @@
+ 	AC_CHECK_LIB(socket, socket, LIBS="-lsocket $LIBS"))
+ 
+ dnl Check for Curses libs.
+-for lib in ncurses curses termcap
++for lib in tinfo ncurses curses termcap
+ do
+ 	AC_CHECK_LIB($lib, tputs, [CURSES_LIBS="-l$lib"; break])
+ done
