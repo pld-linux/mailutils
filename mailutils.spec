@@ -3,8 +3,6 @@
 # - scripts for daemons
 # - check optional gssapi (or maybe use gss?)
 # - some dbm (gdbm? db as (n)dbm? db after update from db2 to db4.1 API?)
-# - security http://security.gentoo.org/glsa/glsa-200505-20.xml
-# - security http://security.gentoo.org/glsa/glsa-200506-02.xml
 #
 # Conditional build:
 %bcond_without	gssapi	# GSSAPI authentication (krb5 or heimdal; not ready for gss)
@@ -15,19 +13,20 @@ Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
 Version:	1.2
 Release:	1
-License:	GPL
+License:	GPL v3+
 Group:		Applications/Mail
 Source0:	ftp://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
 # Source0-md5:	0a5bf84e908f15343414c6a95118a373
 Patch0:		%{name}-info.patch
-Patch1:		%{name}-tinfo.patch
+Patch1:		%{name}-pl.po-update.patch
+Patch2:		%{name}-tinfo.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
-BuildRequires:	autoconf
-BuildRequires:	automake
+BuildRequires:	autoconf >= 2.60
+BuildRequires:	automake >= 1:1.8.5
 BuildRequires:	fribidi-devel
 BuildRequires:	gnu-radius-devel
 BuildRequires:	gnutls-devel >= 1.2.5
-%{?with_sasl:BuildRequires:	gsasl-devel >= 0.0.2}
+%{?with_sasl:BuildRequires:	gsasl-devel >= 0.2.3}
 BuildRequires:	guile-devel >= 1.4
 %{?with_gssapi:BuildRequires:	krb5-devel}
 BuildRequires:	libltdl-devel
@@ -48,7 +47,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 GNU mail utilities.
 
 %description -l pl.UTF-8
-Narzędzia pocztowe z projektu GNU
+Narzędzia pocztowe z projektu GNU.
 
 %package libs
 Summary:	GNU mail utilities libraries
@@ -141,13 +140,16 @@ skrzynek pocztowych.
 
 %prep
 %setup -q
-# do we still need these?
-# %patch0 -p1
-
-#%patch1 -p0
-sed -i -e 's#ncurses curses termcap#tinfo ncurses curses termcap#g' configure*
+%patch0 -p1
+%patch1 -p1
+%patch2 -p0
 
 %build
+%{__libtoolize}
+%{__aclocal} -I m4
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	--with-gnutls \
 	--with-mysql \
