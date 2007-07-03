@@ -1,12 +1,12 @@
 # TODO:
 # - look at files in main package (more split?)
 # - scripts for daemons
-# - check optional gssapi (or maybe use gss?)
 # - some dbm (gdbm? db as (n)dbm? db after update from db2 to db4.1 API?)
 #
 # Conditional build:
-%bcond_without	gssapi	# GSSAPI authentication (krb5 or heimdal; not ready for gss)
+%bcond_without	gssapi	# GSSAPI authentication (krb5 or heimdal)
 %bcond_without	sasl	# without SASL (using GNU SASL)
+%bcond_with	gss	# use GSS instead of krb5
 #
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
@@ -29,7 +29,6 @@ BuildRequires:	gnu-radius-devel
 BuildRequires:	gnutls-devel >= 1.2.5
 %{?with_sasl:BuildRequires:	gsasl-devel >= 0.2.3}
 BuildRequires:	guile-devel >= 1.4
-%{?with_gssapi:BuildRequires:	krb5-devel}
 BuildRequires:	libltdl-devel
 BuildRequires:	mysql-devel
 BuildRequires:	ncurses-devel
@@ -38,6 +37,13 @@ BuildRequires:	postgresql-devel
 BuildRequires:	readline-devel
 BuildRequires:	texinfo
 BuildRequires:	unixODBC-devel
+%if %{with gssapi}
+%if %{with gss}
+BuildRequires:	gss-devel >= 0.0.9
+%else
+BuildRequires:	krb5-devel
+%endif
+%endif
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	mailutils-doc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -154,6 +160,7 @@ rm -f po/stamp-po
 %{__autoheader}
 %{__automake}
 %configure \
+	%{!?with_gss:ac_cv_header_gss_h=no} \
 	--with-gnutls \
 	--with-mysql \
 	--with-postgres \
@@ -168,6 +175,10 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+rm -f $RPM_BUILD_ROOT%{_libdir}/mailutils/*.{la,a}
+# fix to point to library itself, not .so link
+ln -sf $(basename $RPM_BUILD_ROOT%{_libdir}/libmu_scm.so.*.*.*) $RPM_BUILD_ROOT%{_libdir}/libguile-mailutils-v-1.2.so
 
 %find_lang %{name}
 
@@ -208,22 +219,37 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/mailutils
 %attr(755,root,root) %{_libdir}/mailutils/*.so
 %{_datadir}/mailutils
+%{_datadir}/guile/site/mailutils
+%{_datadir}/guile/site/sieve-modules
 %{_infodir}/mailutils.info*
 
 %files libs
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so.*.*.*
+%attr(755,root,root) %{_libdir}/libmailutils.so.*.*.*
+%attr(755,root,root) %{_libdir}/libmu_*.so.*.*.*
+%attr(755,root,root) %{_libdir}/libmuauth.so.*.*.*
+%attr(755,root,root) %{_libdir}/libsieve.so.*.*.*
+%attr(755,root,root) %{_libdir}/libguile-mailutils-v-1.2.so
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mailutils-config
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*.la
+%attr(755,root,root) %{_libdir}/libmailutils.so
+%attr(755,root,root) %{_libdir}/libmu_*.so
+%attr(755,root,root) %{_libdir}/libmuauth.so
+%attr(755,root,root) %{_libdir}/libsieve.so
+%{_libdir}/libmailutils.la
+%{_libdir}/libmu_*.la
+%{_libdir}/libmuauth.la
+%{_libdir}/libsieve.la
 %{_includedir}/mailutils
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libmailutils.a
+%{_libdir}/libmu_*.a
+%{_libdir}/libmuauth.a
+%{_libdir}/libsieve.a
 
 %files -n gnu-mail
 %defattr(644,root,root,755)
