@@ -1,0 +1,5 @@
+- updated to fixed 0.6.90 version (security fix)
+- disclosure at: http://securitytracker.com/alerts/2005/May/1014052.html
+- temporarily changed Source0
+- STBR
+[fixes CAN-2005-1520 CAN-2005-1521 CAN-2005-1522 CAN-2005-1523]
