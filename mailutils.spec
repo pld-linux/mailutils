@@ -24,6 +24,7 @@ URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.60
 BuildRequires:	automake >= 1:1.8.5
 BuildRequires:	fribidi-devel
+BuildRequires:	gettext-devel >= 0.15
 BuildRequires:	gnu-radius-devel
 BuildRequires:	gnutls-devel >= 1.2.5
 %{?with_sasl:BuildRequires:	gsasl-devel >= 0.2.3}
@@ -143,6 +144,8 @@ skrzynek pocztowych.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p0
+
+rm -f po/stamp-po
 
 %build
 %{__libtoolize}
