@@ -15,7 +15,7 @@ Version:	1.2
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
-Source0:	ftp://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
+Source0:	http://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
 # Source0-md5:	0a5bf84e908f15343414c6a95118a373
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-pl.po-update.patch
