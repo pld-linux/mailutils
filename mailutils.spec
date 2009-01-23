@@ -11,12 +11,12 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	1.2
+Version:	2.0
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	http://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.bz2
-# Source0-md5:	0a5bf84e908f15343414c6a95118a373
+# Source0-md5:	299ae73c1c0143de94d7486bf7f479a4
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-pl.po-update.patch
 Patch2:		%{name}-tinfo.patch
