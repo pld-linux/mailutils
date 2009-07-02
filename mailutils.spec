@@ -41,7 +41,7 @@ BuildRequires:	unixODBC-devel
 %if %{with gss}
 BuildRequires:	gss-devel >= 0.0.9
 %else
-BuildRequires:	krb5-devel
+BuildRequires:	heimdal-devel
 %endif
 %endif
 Requires:	%{name}-libs = %{version}-%{release}
