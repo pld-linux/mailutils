@@ -1,37 +1,42 @@
---- mailutils-1.2/doc/texinfo/mailutils.texi.orig	2005-05-18 23:29:54.000000000 +0200
-+++ mailutils-1.2/doc/texinfo/mailutils.texi	2007-07-03 18:07:50.299630956 +0200
-@@ -21,22 +21,19 @@
- @syncodeindex tp fn
+--- mailutils-2.2/doc/texinfo/mailutils.texi.orig	2010-01-13 15:15:59.000000000 +0100
++++ mailutils-2.2/doc/texinfo/mailutils.texi	2010-09-25 20:30:22.960561491 +0200
+@@ -24,24 +24,21 @@
+ @syncodeindex kw ky
  
  @ifinfo
 -@dircategory Email
-+@dircategory Net utilities:
- @direntry
--* Mailutils: (mailutils).       Utilities & library for mailboxes, protocols.
+-@direntry
+-* Mailutils: (mailutils).       GNU Mail Utilities.
 -@end direntry
 -@dircategory Individual utilities
 -@direntry
--* comsatd: (mailutils)comsatd.                  Comsat daemon.
--* frm: (mailutils)frm.                          List headers from a mailbox.
--* guimb: (mailutils)guimb.                      Mailbox processing language.
--* imap4d: (mailutils)imap4d.                    IMAP4 daemon.
--* mail.local: (mailutils)mail.local.            Deliver mail to local mailbox.
--* mail: (mailutils)mail.                        Send and receive mail.
--* messages: (mailutils)messages.                Count messages in mailbox.
--* pop3d: (mailutils)pop3d.                      POP3 daemon.
--* readmsg: (mailutils)readmsg.                  Extract messages from a folder.
--* sieve: (mailutils)sieve.                      Mail filtering utility.
-+* Mailutils: (mailutils).		Utilities & library for mailboxes, protocols
-+* comsatd: (mailutils)comsatd.		Comsat daemon
-+* frm: (mailutils)frm.			List headers from a mailbox
-+* guimb: (mailutils)guimb.		Mailbox processing language
-+* imap4d: (mailutils)imap4d.		IMAP4 daemon
-+* mail.local: (mailutils)mail.local.	Deliver mail to local mailbox
-+* mail: (mailutils)mail.		Send and receive mail
-+* messages: (mailutils)messages.	Count messages in mailbox
-+* pop3d: (mailutils)pop3d.		POP3 daemon
-+* readmsg: (mailutils)readmsg.		Extract messages from a folder
-+* sieve: (mailutils)sieve.		Mail filtering utility
+-* comsatd: (mailutils)comsatd.          Comsat Daemon.
+-* frm: (mailutils)frm.                  List Headers from a Mailbox.
+-* guimb: (mailutils)guimb.              Mailbox Processing Language.
+-* imap4d: (mailutils)imap4d.            IMAP4 Daemon.
+-* mail: (mailutils)mail.                Send and Receive Mail.
+-* maidag: (mailutils)maidag.            A General-Purpose Mail Delivery Agent.
+-* messages: (mailutils)messages.        Count Messages in a Mailbox.
+-* pop3d: (mailutils)pop3d.              POP3 Daemon.
+-* readmsg: (mailutils)readmsg.          Extract Messages from a Folder.
+-* sieve: (mailutils)sieve.              Mail Filtering Utility.
+-* mimeview: (mailutils)mimeview.        View MIME Messages.
+-* mailutils-config: (mailutils)mailutils-config. List Information about Mailutils.
++@dircategory Net utilities:
++@direntry
++* Mailutils: (mailutils).		GNU Mail Utilities
++* comsatd: (mailutils)comsatd.		Comsat Daemon
++* frm: (mailutils)frm.			List Headers from a Mailbox
++* guimb: (mailutils)guimb.		Mailbox Processing Language
++* imap4d: (mailutils)imap4d.		IMAP4 Daemon
++* mail: (mailutils)mail.		Send and Receive Mail
++* maidag: (mailutils)maidag.		A General-Purpose Mail Delivery Agent
++* messages: (mailutils)messages.	Count Messages in a Mailbox
++* pop3d: (mailutils)pop3d.		POP3 Daemon
++* readmsg: (mailutils)readmsg.		Extract Messages from a Folder
++* sieve: (mailutils)sieve.		Mail Filtering Utility
++* mimeview: (mailutils)mimeview.	View MIME Messages
++* mailutils-config: (mailutils)mailutils-config. List Information about Mailutils
  @end direntry
  @end ifinfo
  
