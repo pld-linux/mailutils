@@ -20,6 +20,7 @@ Source0:	http://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.lzma
 # Source0-md5:	9cd0b3af77df3442665d1a12c329b807
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
+Patch2:		link.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
@@ -156,6 +157,7 @@ skrzynek pocztowych.
 %setup -q
 %patch0 -p1
 %patch1 -p0
+%patch2 -p1
 
 %{__rm} po/stamp-po
 
@@ -176,12 +178,12 @@ skrzynek pocztowych.
 	--with-odbc=odbc \
 	--with-postgres
 
-%{__make}
+%{__make} -j1
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install \
+%{__make} -j1 install \
 	DESTDIR=$RPM_BUILD_ROOT
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/mailutils/*.{la,a}

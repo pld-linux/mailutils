@@ -1,0 +1,36 @@
+--- mailutils-2.2/libmu_cfg/Makefile.am.orig	2010-11-14 17:43:28.442524932 +0100
++++ mailutils-2.2/libmu_cfg/Makefile.am	2010-11-14 17:45:43.179179479 +0100
+@@ -34,3 +34,5 @@ libmu_cfg_la_SOURCES=\
+  sql.c\
+  tls.c\
+  virtdomain.c
++
++libmu_cfg_la_LIBADD = $(top_builddir)/mailbox/libmailutils.la
+--- mailutils-2.2/libmu_cpp/Makefile.am.orig	2010-11-14 18:50:01.588792244 +0100
++++ mailutils-2.2/libmu_cpp/Makefile.am	2010-11-14 20:01:16.405029320 +0100
+@@ -46,6 +46,10 @@ libmu_cpp_la_SOURCES = \
+  stream.cc\
+  url.cc
+ 
+-libmu_cpp_la_LIBADD = @MU_COMMON_LIBRARIES@
++libmu_cpp_la_LIBADD = @MU_COMMON_LIBRARIES@ \
++		      $(top_builddir)/mailbox/libmailutils.la \
++		      $(top_builddir)/libproto/pop/libmu_pop.la \
++		      $(top_builddir)/libmu_sieve/libmu_sieve.la
++
+ libmu_cpp_la_LDFLAGS = -rpath $(libdir)  -version-info @VI_CURRENT@:@VI_REVISION@:@VI_AGE@
+ 
+--- mailutils-2.2/Makefile.am.orig	2010-11-14 20:10:30.638307733 +0100
++++ mailutils-2.2/Makefile.am	2010-11-14 20:10:38.068306933 +0100
+@@ -101,10 +101,10 @@ SUBDIRS = \
+  lib\
+  libmu_argp\
+  libmu_cfg\
+- $(LIBMU_CPP_DIR)\
+  $(GINT_DIR)\
+  $(LIBMU_SCM_DIR)\
+  libmu_sieve\
++ $(LIBMU_CPP_DIR)\
+  $(PYTHON_DIR)\
+  doc\
+  config\
