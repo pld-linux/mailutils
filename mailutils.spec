@@ -25,7 +25,7 @@ URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	fribidi-devel
-BuildRequires:	gettext-devel >= 0.17
+BuildRequires:	gettext-tools >= 0.17
 BuildRequires:	gnu-radius-devel >= 1.6
 BuildRequires:	gnutls-devel >= 1.2.5
 %{?with_sasl:BuildRequires:	gsasl-devel >= 0.2.3}
