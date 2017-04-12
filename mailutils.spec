@@ -1,49 +1,72 @@
 # TODO:
 # - look at files in main package (more split?)
-# - guile and python packages?
+# - guile and python packages? (note: maidag and mu-mh/inc link with libmu_scm/libmu_py libraries)
 # - scripts for daemons
-# - some dbm? (berkeley db?)
+# - dbm switches? (GDBM BDB NDBM TC KCberkeley db?)
 #
 # Conditional build:
 %bcond_without	gssapi	# GSSAPI authentication (krb5 or heimdal)
+%bcond_with	gss	# use GSS instead of MIT/Heimdal
+%bcond_without	ldap	# LDAP support
+%bcond_without	radius	# RADIUS support
 %bcond_without	sasl	# without SASL (using GNU SASL)
-%bcond_with	gss	# use GSS instead of heimdal
+# language support
+%bcond_without	guile	# Guile support
+%bcond_without	python	# Python support
+# SQL:
+%bcond_without	mysql	# MySQL module
+%bcond_without	pgsql	# PostgreSQL module
+%bcond_without	odbc	# ODBC module (any variant)
+%bcond_with	iodbc	# ODBC module using libiodbc
+# broken code:
+%bcond_with	cxx	# C++ wrapper [broken in 3.x]
+%bcond_with	nntp	# NNTP support [broken in 3.x]
 #
+%if %{without odbc}
+%undefine	with_iodbc
+%endif
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	2.2
+Version:	3.1.1
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
-Source0:	http://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.lzma
-# Source0-md5:	9cd0b3af77df3442665d1a12c329b807
+Source0:	http://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
+# Source0-md5:	dc7d1e5d65037a053d0ea354d3b88bb7
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
+Patch3:		%{name}-db.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
+BuildRequires:	bison
+BuildRequires:	flex
 BuildRequires:	fribidi-devel
-BuildRequires:	gettext-tools >= 0.17
-BuildRequires:	gnu-radius-devel >= 1.6
+BuildRequires:	gettext-tools >= 0.18
+%{?with_radius:BuildRequires:	gnu-radius-devel >= 1.6}
 BuildRequires:	gnutls-devel >= 1.2.5
 %{?with_sasl:BuildRequires:	gsasl-devel >= 0.2.3}
-BuildRequires:	guile-devel >= 1.8
+%{?with_guile:BuildRequires:	guile-devel >= 1.8}
+%{?with_odbc:%{!?with_iodbc:BuildRequires:	libiodbc-devel}}
 BuildRequires:	libltdl-devel
+%if %{with cxx}
+BuildRequires:	libstdc++-devel
+%endif
 BuildRequires:	libwrap-devel
-BuildRequires:	libtool
-BuildRequires:	mysql-devel
+BuildRequires:	libtool >= 2:1.5
+%{?with_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	ncurses-devel
-BuildRequires:	openldap-devel
+%{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	pam-devel
-BuildRequires:	postgresql-devel
-BuildRequires:	python-devel >= 1:2.5
+%{?with_pgsql:BuildRequires:	postgresql-devel}
+%{?with_python:BuildRequires:	python-devel >= 1:2.5}
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.219
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	texinfo
-BuildRequires:	unixODBC-devel
+%{?with_odbc:%{!?with_iodbc:BuildRequires:	unixODBC-devel}}
 BuildRequires:	xz
 %if %{with gssapi}
 %if %{with gss}
@@ -158,25 +181,35 @@ skrzynek pocztowych.
 %patch0 -p1
 %patch1 -p0
 %patch2 -p1
+%patch3 -p1
 
 %{__rm} po/stamp-po
 
 %build
 %{__libtoolize}
-%{__aclocal} -I m4 -I am -I gint
+%{__aclocal} -I m4 -I am -I gint -I doc/imprimatur
 %{__autoconf}
 %{__autoheader}
 %{__automake}
 %configure \
 	%{!?with_gss:ac_cv_header_gss_h=no} \
+	%{!?with_cxx:--disable-cxx} \
+	--enable-experimental \
+	%{!?with_nntp:--disable-nntp} \
+	%{!?with_python:--disable-python} \
+	%{?with_radius:--enable-radius} \
 	--disable-silent-rules \
+	--with-dbm=BDB \
 	--with-gnutls \
 	%{?with_sasl:--with-gsasl} \
 	%{?with_gssapi:--with-gssapi} \
+	%{!?with_guile:--without-guile} \
+	%{!?with_ldap:--without-ldap} \
+	--with-mail-spool=/var/mail \
 	--with-mh-bindir=%{_libexecdir}/mu-mh \
-	--with-mysql \
-	--with-odbc=odbc \
-	--with-postgres
+	%{?with_mysql:--with-mysql} \
+	%{?with_odbc:--with-odbc=%{?with_iodbc:iodbc}%{!?with_iodbc:odbc}} \
+	%{?with_pgsql:--with-postgres}
 
 %{__make} -j1
 
@@ -218,12 +251,13 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/frm
 %attr(755,root,root) %{_bindir}/from
 %attr(755,root,root) %{_bindir}/guimb
+%attr(755,root,root) %{_bindir}/mailutils
 %attr(755,root,root) %{_bindir}/messages
 %attr(755,root,root) %{_bindir}/mimeview
 %attr(755,root,root) %{_bindir}/movemail
 %attr(755,root,root) %{_bindir}/readmsg
 %attr(755,root,root) %{_bindir}/sieve
-%attr(755,root,root) %{_bindir}/sieve.scm
+%attr(755,root,root) %{_bindir}/sieve2scm
 %attr(755,root,root) %{_sbindir}/comsatd
 %attr(755,root,root) %{_sbindir}/maidag
 # traditional bin/mh dir
@@ -243,91 +277,121 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libexecdir}/mu-mh/mhn
 %attr(755,root,root) %{_libexecdir}/mu-mh/mhparam
 %attr(755,root,root) %{_libexecdir}/mu-mh/mhpath
+%attr(755,root,root) %{_libexecdir}/mu-mh/mhseq
+%attr(755,root,root) %{_libexecdir}/mu-mh/msgchk
 %attr(755,root,root) %{_libexecdir}/mu-mh/pick
+%attr(755,root,root) %{_libexecdir}/mu-mh/prompter
 %attr(755,root,root) %{_libexecdir}/mu-mh/refile
 %attr(755,root,root) %{_libexecdir}/mu-mh/repl
 %attr(755,root,root) %{_libexecdir}/mu-mh/rmf
 %attr(755,root,root) %{_libexecdir}/mu-mh/rmm
 %attr(755,root,root) %{_libexecdir}/mu-mh/scan
 %attr(755,root,root) %{_libexecdir}/mu-mh/send
+%attr(755,root,root) %{_libexecdir}/mu-mh/show
 %attr(755,root,root) %{_libexecdir}/mu-mh/sortm
 %attr(755,root,root) %{_libexecdir}/mu-mh/whatnow
 %attr(755,root,root) %{_libexecdir}/mu-mh/whom
 %dir %{_libdir}/mailutils
 %attr(755,root,root) %{_libdir}/mailutils/*.so
 %{_datadir}/mailutils
-%{_datadir}/guile/site/mailutils
+%if %{with guile}
+%{_datadir}/guile/site/2.0/mailutils
+%endif
+%if %{with python}
 %dir %{py_sitedir}/mailutils
 %attr(755,root,root) %{py_sitedir}/mailutils/c_api.so
 %dir %{py_sitescriptdir}/mailutils
 %{py_sitescriptdir}/mailutils/*.py[co]
+%endif
 %{_infodir}/mailutils.info*
 
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libmailutils.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmailutils.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmailutils.so.5
 %attr(755,root,root) %{_libdir}/libmu_auth.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.2
-%attr(755,root,root) %{_libdir}/libmu_cfg.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_cfg.so.0
+%attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.5
+%attr(755,root,root) %{_libdir}/libmu_dbm.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.5
+%if %{with cxx}
 %attr(755,root,root) %{_libdir}/libmu_cpp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.5
+%endif
 %attr(755,root,root) %{_libdir}/libmu_imap.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.5
 %attr(755,root,root) %{_libdir}/libmu_maildir.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_maildir.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_maildir.so.5
 %attr(755,root,root) %{_libdir}/libmu_mailer.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mailer.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_mailer.so.5
 %attr(755,root,root) %{_libdir}/libmu_mbox.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mbox.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_mbox.so.5
 %attr(755,root,root) %{_libdir}/libmu_mh.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mh.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_mh.so.5
+%if %{with nntp}
 %attr(755,root,root) %{_libdir}/libmu_nntp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_nntp.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_nntp.so.5
+%endif
 %attr(755,root,root) %{_libdir}/libmu_pop.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_pop.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_pop.so.5
+%if %{with python}
 %attr(755,root,root) %{_libdir}/libmu_py.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_py.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_py.so.5
+%endif
+%if %{with guile}
 %attr(755,root,root) %{_libdir}/libmu_scm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_scm.so.2
+%attr(755,root,root) %ghost %{_libdir}/libmu_scm.so.5
+%endif
 %attr(755,root,root) %{_libdir}/libmu_sieve.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.2
-%attr(755,root,root) %{_libdir}/libguile-mailutils-v-2.2.so
+%attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.5
+%attr(755,root,root) %{_libdir}/libmuaux.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libmuaux.so.5
+%attr(755,root,root) %{_libdir}/libguile-mailutils-v-%{version}.so
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mailutils-config
 %attr(755,root,root) %{_libdir}/libmailutils.so
 %attr(755,root,root) %{_libdir}/libmu_auth.so
-%attr(755,root,root) %{_libdir}/libmu_cfg.so
-%attr(755,root,root) %{_libdir}/libmu_cpp.so
+%attr(755,root,root) %{_libdir}/libmu_dbm.so
 %attr(755,root,root) %{_libdir}/libmu_imap.so
 %attr(755,root,root) %{_libdir}/libmu_maildir.so
 %attr(755,root,root) %{_libdir}/libmu_mailer.so
 %attr(755,root,root) %{_libdir}/libmu_mbox.so
 %attr(755,root,root) %{_libdir}/libmu_mh.so
-%attr(755,root,root) %{_libdir}/libmu_nntp.so
 %attr(755,root,root) %{_libdir}/libmu_pop.so
+%if %{with python}
 %attr(755,root,root) %{_libdir}/libmu_py.so
+%endif
+%if %{with guile}
 %attr(755,root,root) %{_libdir}/libmu_scm.so
+%endif
 %attr(755,root,root) %{_libdir}/libmu_sieve.so
+%attr(755,root,root) %{_libdir}/libmuaux.so
 %{_libdir}/libmailutils.la
 %{_libdir}/libmu_auth.la
-%{_libdir}/libmu_cfg.la
-%{_libdir}/libmu_cpp.la
+%{_libdir}/libmu_dbm.la
 %{_libdir}/libmu_imap.la
 %{_libdir}/libmu_maildir.la
 %{_libdir}/libmu_mailer.la
 %{_libdir}/libmu_mbox.la
 %{_libdir}/libmu_mh.la
-%{_libdir}/libmu_nntp.la
 %{_libdir}/libmu_pop.la
+%if %{with python}
 %{_libdir}/libmu_py.la
+%endif
+%if %{with guile}
 %{_libdir}/libmu_scm.la
+%endif
 %{_libdir}/libmu_sieve.la
-# static-only
-%{_libdir}/libmu_argp.a
+%{_libdir}/libmuaux.la
+%if %{with cxx}
+%attr(755,root,root) %{_libdir}/libmu_cpp.so
+%{_libdir}/libmu_cpp.la
+%endif
+%if %{with nntp}
+%attr(755,root,root) %{_libdir}/libmu_nntp.so
+%{_libdir}/libmu_nntp.la
+%endif
 %{_includedir}/mailutils
 %{_aclocaldir}/mailutils.m4
 
@@ -335,18 +399,27 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/libmailutils.a
 %{_libdir}/libmu_auth.a
-%{_libdir}/libmu_cfg.a
+%if %{with cxx}
 %{_libdir}/libmu_cpp.a
+%endif
+%{_libdir}/libmu_dbm.a
 %{_libdir}/libmu_imap.a
 %{_libdir}/libmu_maildir.a
 %{_libdir}/libmu_mailer.a
 %{_libdir}/libmu_mbox.a
 %{_libdir}/libmu_mh.a
+%if %{with nntp}
 %{_libdir}/libmu_nntp.a
+%endif
 %{_libdir}/libmu_pop.a
+%if %{with python}
 %{_libdir}/libmu_py.a
+%endif
+%if %{with guile}
 %{_libdir}/libmu_scm.a
+%endif
 %{_libdir}/libmu_sieve.a
+%{_libdir}/libmuaux.a
 
 %files -n gnu-mail
 %defattr(644,root,root,755)
@@ -355,6 +428,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -n gnu-pop3d
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/popauth
 %attr(755,root,root) %{_sbindir}/pop3d
 %{_mandir}/man1/pop3d.1*
 %{_mandir}/man1/popauth.1*
