@@ -28,3 +28,39 @@
        AC_CHECK_HEADERS(tcpd.h,
                         [status_tcpwrap=yes],
                         [status_tcpwrap=no])
+--- mailutils-3.4/libmu_cpp/Makefile.am.orig	2017-06-08 15:08:20.000000000 +0200
++++ mailutils-3.4/libmu_cpp/Makefile.am	2017-12-10 21:03:12.276619950 +0100
+@@ -42,6 +42,6 @@
+  stream.cc\
+  url.cc
+ 
+-libmu_cpp_la_LIBADD = @MU_COMMON_LIBRARIES@
++libmu_cpp_la_LIBADD = $(top_builddir)/libmailutils/libmailutils.la $(top_builddir)/libmu_sieve/libmu_sieve.la $(top_builddir)/libproto/pop/libmu_pop.la @MU_COMMON_LIBRARIES@
+ libmu_cpp_la_LDFLAGS = -rpath $(libdir)  -version-info @VI_CURRENT@:@VI_REVISION@:@VI_AGE@
+ 
+--- mailutils-3.4/Makefile.am.orig	2017-10-18 10:51:32.000000000 +0200
++++ mailutils-3.4/Makefile.am	2017-12-10 21:26:46.673270471 +0100
+@@ -96,14 +96,12 @@
+  libproto\
+  testsuite\
+  lib\
+- $(LIBMU_CPP_DIR)\
+  $(GINT_DIR)\
+  $(LIBMU_SCM_DIR)\
+  $(LIBMU_DBM_DIR)\
+  libmu_sieve\
+  $(PYTHON_DIR)\
+  doc\
+- examples\
+  mu\
+  $(SCHEME_DIR)\
+  $(FRM_DIR)\
+@@ -113,6 +111,8 @@
+  $(MAIL_DIR)\
+  $(SIEVE_DIR)\
+  $(MESSAGES_DIR)\
++ $(LIBMU_CPP_DIR)\
++ examples\
+  $(COMSAT_DIR)\
+  $(READMSG_DIR)\
+  $(DOTLOCK_DIR)\

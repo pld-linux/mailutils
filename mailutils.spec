@@ -2,7 +2,7 @@
 # - look at files in main package (more split?)
 # - guile and python packages? (note: maidag and mu-mh/inc link with libmu_scm/libmu_py libraries)
 # - scripts for daemons
-# - dbm switches? (GDBM BDB NDBM TC KCberkeley db?)
+# - dbm switches? (GDBM BDB NDBM TC KC)
 #
 # Conditional build:
 %bcond_without	gssapi	# GSSAPI authentication (krb5 or heimdal)
@@ -11,6 +11,7 @@
 %bcond_without	radius	# RADIUS support
 %bcond_without	sasl	# without SASL (using GNU SASL)
 # language support
+%bcond_without	cxx	# C++ wrapper
 %bcond_without	guile	# Guile support
 %bcond_without	python	# Python support
 # SQL:
@@ -19,7 +20,6 @@
 %bcond_without	odbc	# ODBC module (any variant)
 %bcond_with	iodbc	# ODBC module using libiodbc
 # broken code:
-%bcond_with	cxx	# C++ wrapper [broken in 3.x]
 %bcond_with	nntp	# NNTP support [broken in 3.x]
 #
 %if %{without odbc}
@@ -28,28 +28,29 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.1.1
+Version:	3.4
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	http://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	dc7d1e5d65037a053d0ea354d3b88bb7
+# Source0-md5:	d43568e9a1f40ae063a84c3a408f40a1
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
 Patch3:		%{name}-db.patch
+Patch4:		%{name}-format.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	fribidi-devel
-BuildRequires:	gettext-tools >= 0.18
+BuildRequires:	gettext-tools >= 0.19
 %{?with_radius:BuildRequires:	gnu-radius-devel >= 1.6}
 BuildRequires:	gnutls-devel >= 1.2.5
 %{?with_sasl:BuildRequires:	gsasl-devel >= 0.2.3}
 %{?with_guile:BuildRequires:	guile-devel >= 1.8}
-%{?with_odbc:%{!?with_iodbc:BuildRequires:	libiodbc-devel}}
+%{?with_odbc:%{?with_iodbc:BuildRequires:	libiodbc-devel}}
 BuildRequires:	libltdl-devel
 %if %{with cxx}
 BuildRequires:	libstdc++-devel
@@ -79,7 +80,8 @@ Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	mailutils-doc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_libexecdir	%{_sbindir}
+# mailutils variant of traditional PREFIX/bin/mh dir (FHS disallows */bin subdir other than plain "mh")
+%define		mh_bindir	%{_libexecdir}/mu-mh
 
 %description
 GNU mail utilities.
@@ -182,6 +184,7 @@ skrzynek pocztowych.
 %patch1 -p0
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %{__rm} po/stamp-po
 
@@ -194,6 +197,7 @@ skrzynek pocztowych.
 %configure \
 	%{!?with_gss:ac_cv_header_gss_h=no} \
 	%{!?with_cxx:--disable-cxx} \
+	%{!?debug:--disable-debug} \
 	--enable-experimental \
 	%{!?with_nntp:--disable-nntp} \
 	%{!?with_python:--disable-python} \
@@ -257,40 +261,44 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/movemail
 %attr(755,root,root) %{_bindir}/readmsg
 %attr(755,root,root) %{_bindir}/sieve
-%attr(755,root,root) %{_bindir}/sieve2scm
 %attr(755,root,root) %{_sbindir}/comsatd
 %attr(755,root,root) %{_sbindir}/maidag
-# traditional bin/mh dir
-%dir %{_libexecdir}/mu-mh
-%attr(755,root,root) %{_libexecdir}/mu-mh/ali
-%attr(755,root,root) %{_libexecdir}/mu-mh/anno
-%attr(755,root,root) %{_libexecdir}/mu-mh/burst
-%attr(755,root,root) %{_libexecdir}/mu-mh/comp
-%attr(755,root,root) %{_libexecdir}/mu-mh/fmtcheck
-%attr(755,root,root) %{_libexecdir}/mu-mh/folder
-%attr(755,root,root) %{_libexecdir}/mu-mh/folders
-%attr(755,root,root) %{_libexecdir}/mu-mh/forw
-%attr(755,root,root) %{_libexecdir}/mu-mh/inc
-%attr(755,root,root) %{_libexecdir}/mu-mh/install-mh
-%attr(755,root,root) %{_libexecdir}/mu-mh/mark
-%attr(755,root,root) %{_libexecdir}/mu-mh/mhl
-%attr(755,root,root) %{_libexecdir}/mu-mh/mhn
-%attr(755,root,root) %{_libexecdir}/mu-mh/mhparam
-%attr(755,root,root) %{_libexecdir}/mu-mh/mhpath
-%attr(755,root,root) %{_libexecdir}/mu-mh/mhseq
-%attr(755,root,root) %{_libexecdir}/mu-mh/msgchk
-%attr(755,root,root) %{_libexecdir}/mu-mh/pick
-%attr(755,root,root) %{_libexecdir}/mu-mh/prompter
-%attr(755,root,root) %{_libexecdir}/mu-mh/refile
-%attr(755,root,root) %{_libexecdir}/mu-mh/repl
-%attr(755,root,root) %{_libexecdir}/mu-mh/rmf
-%attr(755,root,root) %{_libexecdir}/mu-mh/rmm
-%attr(755,root,root) %{_libexecdir}/mu-mh/scan
-%attr(755,root,root) %{_libexecdir}/mu-mh/send
-%attr(755,root,root) %{_libexecdir}/mu-mh/show
-%attr(755,root,root) %{_libexecdir}/mu-mh/sortm
-%attr(755,root,root) %{_libexecdir}/mu-mh/whatnow
-%attr(755,root,root) %{_libexecdir}/mu-mh/whom
+%dir %{mh_bindir}
+%attr(755,root,root) %{mh_bindir}/ali
+%attr(755,root,root) %{mh_bindir}/anno
+%attr(755,root,root) %{mh_bindir}/burst
+%attr(755,root,root) %{mh_bindir}/comp
+%attr(755,root,root) %{mh_bindir}/fmtcheck
+%attr(755,root,root) %{mh_bindir}/folder
+%attr(755,root,root) %{mh_bindir}/folders
+%attr(755,root,root) %{mh_bindir}/forw
+%attr(755,root,root) %{mh_bindir}/inc
+%attr(755,root,root) %{mh_bindir}/install-mh
+%attr(755,root,root) %{mh_bindir}/mark
+%attr(755,root,root) %{mh_bindir}/mhl
+%attr(755,root,root) %{mh_bindir}/mhn
+%attr(755,root,root) %{mh_bindir}/mhparam
+%attr(755,root,root) %{mh_bindir}/mhpath
+%attr(755,root,root) %{mh_bindir}/mhseq
+%attr(755,root,root) %{mh_bindir}/msgchk
+%attr(755,root,root) %{mh_bindir}/next
+%attr(755,root,root) %{mh_bindir}/pick
+%attr(755,root,root) %{mh_bindir}/prev
+%attr(755,root,root) %{mh_bindir}/prompter
+%attr(755,root,root) %{mh_bindir}/refile
+%attr(755,root,root) %{mh_bindir}/repl
+%attr(755,root,root) %{mh_bindir}/rmf
+%attr(755,root,root) %{mh_bindir}/rmm
+%attr(755,root,root) %{mh_bindir}/scan
+%attr(755,root,root) %{mh_bindir}/send
+%attr(755,root,root) %{mh_bindir}/show
+%attr(755,root,root) %{mh_bindir}/sortm
+%attr(755,root,root) %{mh_bindir}/whatnow
+%attr(755,root,root) %{mh_bindir}/whom
+%if "%{_libexecdir}" != "%{_libdir}"
+%dir %{_libexecdir}/mailutils
+%endif
+%attr(755,root,root) %{_libexecdir}/mailutils/mailutils-*
 %dir %{_libdir}/mailutils
 %attr(755,root,root) %{_libdir}/mailutils/*.so
 %{_datadir}/mailutils
