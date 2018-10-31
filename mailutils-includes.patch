@@ -1,0 +1,11 @@
+Include <limits.h> for MB_LEN_MAX (4 is incorrect and conflicts with wchar2.h)
+--- mailutils-3.5/frm/frm.h.orig	2018-02-10 07:06:00.000000000 +0100
++++ mailutils-3.5/frm/frm.h	2018-10-31 07:27:35.661481230 +0100
+@@ -24,6 +24,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <fcntl.h>
++#include <limits.h>
+ #include <sys/types.h>
+ #ifdef HAVE_TERMIOS_H
+ # include <termios.h>

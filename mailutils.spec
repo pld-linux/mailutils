@@ -28,17 +28,16 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.4
+Version:	3.5
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	http://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	d43568e9a1f40ae063a84c3a408f40a1
+# Source0-md5:	c3d93a143a7920edd5fcc20a658ca9cf
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
-Patch3:		%{name}-db.patch
-Patch4:		%{name}-format.patch
+Patch3:		%{name}-includes.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
@@ -49,7 +48,7 @@ BuildRequires:	gettext-tools >= 0.19
 %{?with_radius:BuildRequires:	gnu-radius-devel >= 1.6}
 BuildRequires:	gnutls-devel >= 1.2.5
 %{?with_sasl:BuildRequires:	gsasl-devel >= 0.2.3}
-%{?with_guile:BuildRequires:	guile-devel >= 1.8}
+%{?with_guile:BuildRequires:	guile-devel >= 5:2.2.0}
 %{?with_odbc:%{?with_iodbc:BuildRequires:	libiodbc-devel}}
 BuildRequires:	libltdl-devel
 %if %{with cxx}
@@ -184,7 +183,6 @@ skrzynek pocztowych.
 %patch1 -p0
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 %{__rm} po/stamp-po
 
@@ -254,7 +252,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/dotlock
 %attr(755,root,root) %{_bindir}/frm
 %attr(755,root,root) %{_bindir}/from
+%if %{with guile}
 %attr(755,root,root) %{_bindir}/guimb
+%endif
 %attr(755,root,root) %{_bindir}/mailutils
 %attr(755,root,root) %{_bindir}/messages
 %attr(755,root,root) %{_bindir}/mimeview
@@ -353,7 +353,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.5
 %attr(755,root,root) %{_libdir}/libmuaux.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libmuaux.so.5
+%if %{with guile}
 %attr(755,root,root) %{_libdir}/libguile-mailutils-v-%{version}.so
+%endif
 
 %files devel
 %defattr(644,root,root,755)

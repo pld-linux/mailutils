@@ -38,9 +38,9 @@
 +libmu_cpp_la_LIBADD = $(top_builddir)/libmailutils/libmailutils.la $(top_builddir)/libmu_sieve/libmu_sieve.la $(top_builddir)/libproto/pop/libmu_pop.la @MU_COMMON_LIBRARIES@
  libmu_cpp_la_LDFLAGS = -rpath $(libdir)  -version-info @VI_CURRENT@:@VI_REVISION@:@VI_AGE@
  
---- mailutils-3.4/Makefile.am.orig	2017-10-18 10:51:32.000000000 +0200
-+++ mailutils-3.4/Makefile.am	2017-12-10 21:26:46.673270471 +0100
-@@ -96,14 +96,12 @@
+--- mailutils-3.5/Makefile.am.orig	2018-07-28 17:24:19.000000000 +0200
++++ mailutils-3.5/Makefile.am	2018-10-30 21:05:45.491907245 +0100
+@@ -92,14 +92,12 @@
   libproto\
   testsuite\
   lib\
@@ -49,13 +49,13 @@
   $(LIBMU_SCM_DIR)\
   $(LIBMU_DBM_DIR)\
   libmu_sieve\
-  $(PYTHON_DIR)\
+  python\
   doc\
 - examples\
   mu\
   $(SCHEME_DIR)\
   $(FRM_DIR)\
-@@ -113,6 +111,8 @@
+@@ -109,6 +107,8 @@
   $(MAIL_DIR)\
   $(SIEVE_DIR)\
   $(MESSAGES_DIR)\
