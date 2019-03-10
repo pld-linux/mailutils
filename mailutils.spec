@@ -8,7 +8,7 @@
 %bcond_without	gssapi	# GSSAPI authentication (krb5 or heimdal)
 %bcond_with	gss	# use GSS instead of MIT/Heimdal
 %bcond_without	ldap	# LDAP support
-%bcond_without	radius	# RADIUS support
+%bcond_with	radius	# RADIUS support [requires gnu-radius, which is not ready for guile 2.x]
 %bcond_without	sasl	# without SASL (using GNU SASL)
 # language support
 %bcond_without	cxx	# C++ wrapper
@@ -28,16 +28,17 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.5
+Version:	3.6
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	http://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	c3d93a143a7920edd5fcc20a658ca9cf
+# Source0-md5:	70bb4a88956f63a1c613491c84a19662
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
 Patch3:		%{name}-includes.patch
+Patch4:		%{name}-examples.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
@@ -56,6 +57,7 @@ BuildRequires:	libstdc++-devel
 %endif
 BuildRequires:	libwrap-devel
 BuildRequires:	libtool >= 2:1.5
+BuildRequires:	libunistring-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	ncurses-devel
 %{?with_ldap:BuildRequires:	openldap-devel}
@@ -183,6 +185,7 @@ skrzynek pocztowych.
 %patch1 -p0
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %{__rm} po/stamp-po
 
@@ -303,7 +306,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/mailutils/*.so
 %{_datadir}/mailutils
 %if %{with guile}
-%{_datadir}/guile/site/2.0/mailutils
+%{_datadir}/guile/site/2.*/mailutils
 %endif
 %if %{with python}
 %dir %{py_sitedir}/mailutils
@@ -316,43 +319,43 @@ rm -rf $RPM_BUILD_ROOT
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libmailutils.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmailutils.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmailutils.so.6
 %attr(755,root,root) %{_libdir}/libmu_auth.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.6
 %attr(755,root,root) %{_libdir}/libmu_dbm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.6
 %if %{with cxx}
 %attr(755,root,root) %{_libdir}/libmu_cpp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.6
 %endif
 %attr(755,root,root) %{_libdir}/libmu_imap.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.6
 %attr(755,root,root) %{_libdir}/libmu_maildir.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_maildir.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_maildir.so.6
 %attr(755,root,root) %{_libdir}/libmu_mailer.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mailer.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_mailer.so.6
 %attr(755,root,root) %{_libdir}/libmu_mbox.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mbox.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_mbox.so.6
 %attr(755,root,root) %{_libdir}/libmu_mh.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mh.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_mh.so.6
 %if %{with nntp}
 %attr(755,root,root) %{_libdir}/libmu_nntp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_nntp.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_nntp.so.6
 %endif
 %attr(755,root,root) %{_libdir}/libmu_pop.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_pop.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_pop.so.6
 %if %{with python}
 %attr(755,root,root) %{_libdir}/libmu_py.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_py.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_py.so.6
 %endif
 %if %{with guile}
 %attr(755,root,root) %{_libdir}/libmu_scm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_scm.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_scm.so.6
 %endif
 %attr(755,root,root) %{_libdir}/libmu_sieve.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.6
 %attr(755,root,root) %{_libdir}/libmuaux.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmuaux.so.5
+%attr(755,root,root) %ghost %{_libdir}/libmuaux.so.6
 %if %{with guile}
 %attr(755,root,root) %{_libdir}/libguile-mailutils-v-%{version}.so
 %endif
