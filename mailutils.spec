@@ -28,12 +28,12 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.6
-Release:	3
+Version:	3.7
+Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
-Source0:	http://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	70bb4a88956f63a1c613491c84a19662
+Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
+# Source0-md5:	b5347a33f853b32ac544f743cc83895d
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
@@ -322,12 +322,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libmailutils.so.6
 %attr(755,root,root) %{_libdir}/libmu_auth.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.6
-%attr(755,root,root) %{_libdir}/libmu_dbm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.6
 %if %{with cxx}
 %attr(755,root,root) %{_libdir}/libmu_cpp.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.6
 %endif
+%attr(755,root,root) %{_libdir}/libmu_dbm.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.6
+%attr(755,root,root) %{_libdir}/libmu_dotmail.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libmu_dotmail.so.6
 %attr(755,root,root) %{_libdir}/libmu_imap.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.6
 %attr(755,root,root) %{_libdir}/libmu_maildir.so.*.*.*
@@ -366,6 +368,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libmailutils.so
 %attr(755,root,root) %{_libdir}/libmu_auth.so
 %attr(755,root,root) %{_libdir}/libmu_dbm.so
+%attr(755,root,root) %{_libdir}/libmu_dotmail.so
 %attr(755,root,root) %{_libdir}/libmu_imap.so
 %attr(755,root,root) %{_libdir}/libmu_maildir.so
 %attr(755,root,root) %{_libdir}/libmu_mailer.so
@@ -383,6 +386,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libmailutils.la
 %{_libdir}/libmu_auth.la
 %{_libdir}/libmu_dbm.la
+%{_libdir}/libmu_dotmail.la
 %{_libdir}/libmu_imap.la
 %{_libdir}/libmu_maildir.la
 %{_libdir}/libmu_mailer.la
@@ -416,6 +420,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libmu_cpp.a
 %endif
 %{_libdir}/libmu_dbm.a
+%{_libdir}/libmu_dotmail.a
 %{_libdir}/libmu_imap.a
 %{_libdir}/libmu_maildir.a
 %{_libdir}/libmu_mailer.a

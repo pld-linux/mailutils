@@ -8,3 +8,14 @@
   mimetest\
   msg-send\
   murun\
+--- mailutils-3.7/examples/cpp/lsf.cc.orig	2019-03-26 17:11:11.000000000 +0100
++++ mailutils-3.7/examples/cpp/lsf.cc	2019-06-30 15:45:11.081072274 +0200
+@@ -28,7 +28,7 @@
+ 	  (resp->type & MU_FOLDER_ATTRIBUTE_DIRECTORY) ? 'd' : '-',
+ 	  (resp->type & MU_FOLDER_ATTRIBUTE_FILE) ? 'f' : '-',
+ 	  resp->separator,
+-	  resp->level,
++	  resp->depth,
+ 	  resp->name);
+   return 0;
+ }
