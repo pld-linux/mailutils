@@ -1,6 +1,6 @@
 # TODO:
 # - look at files in main package (more split?)
-# - guile and python packages? (note: maidag and mu-mh/inc link with libmu_scm/libmu_py libraries)
+# - guile and python packages? (note: lmtpd, mda, putmail, mu-mh/inc link with libmu_scm/libmu_py libraries)
 # - scripts for daemons
 # - dbm switches? (GDBM BDB NDBM TC KC)
 #
@@ -28,17 +28,18 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.7
-Release:	2
+Version:	3.8
+Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	b5347a33f853b32ac544f743cc83895d
+# Source0-md5:	283f803ea2057d50ecabf9fd8de9b776
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
 Patch3:		%{name}-includes.patch
 Patch4:		%{name}-examples.patch
+Patch5:		%{name}-extern.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
@@ -186,6 +187,7 @@ skrzynek pocztowych.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %{__rm} po/stamp-po
 
@@ -262,10 +264,12 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/messages
 %attr(755,root,root) %{_bindir}/mimeview
 %attr(755,root,root) %{_bindir}/movemail
+%attr(755,root,root) %{_bindir}/putmail
 %attr(755,root,root) %{_bindir}/readmsg
 %attr(755,root,root) %{_bindir}/sieve
 %attr(755,root,root) %{_sbindir}/comsatd
-%attr(755,root,root) %{_sbindir}/maidag
+%attr(755,root,root) %{_sbindir}/lmtpd
+%attr(755,root,root) %{_sbindir}/mda
 %dir %{mh_bindir}
 %attr(755,root,root) %{mh_bindir}/ali
 %attr(755,root,root) %{mh_bindir}/anno
