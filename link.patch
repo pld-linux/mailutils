@@ -28,14 +28,14 @@
        AC_CHECK_HEADERS(tcpd.h,
                         [status_tcpwrap=yes],
                         [status_tcpwrap=no])
---- mailutils-3.4/libmu_cpp/Makefile.am.orig	2017-06-08 15:08:20.000000000 +0200
-+++ mailutils-3.4/libmu_cpp/Makefile.am	2017-12-10 21:03:12.276619950 +0100
-@@ -42,6 +42,6 @@
+--- mailutils-3.9/libmu_cpp/Makefile.am.orig	2020-03-19 19:04:22.031808542 +0100
++++ mailutils-3.9/libmu_cpp/Makefile.am	2020-03-19 19:05:45.661355482 +0100
+@@ -41,6 +41,6 @@
   stream.cc\
   url.cc
  
--libmu_cpp_la_LIBADD = @MU_COMMON_LIBRARIES@
-+libmu_cpp_la_LIBADD = $(top_builddir)/libmailutils/libmailutils.la $(top_builddir)/libmu_sieve/libmu_sieve.la $(top_builddir)/libproto/pop/libmu_pop.la @MU_COMMON_LIBRARIES@
+-libmu_cpp_la_LIBADD = $(MU_COMMON_LIBRARIES)
++libmu_cpp_la_LIBADD = $(top_builddir)/libmailutils/libmailutils.la $(top_builddir)/libmu_sieve/libmu_sieve.la $(top_builddir)/libproto/pop/libmu_pop.la $(MU_COMMON_LIBRARIES)
  libmu_cpp_la_LDFLAGS = -rpath $(libdir)  -version-info @VI_CURRENT@:@VI_REVISION@:@VI_AGE@
  
 --- mailutils-3.5/Makefile.am.orig	2018-07-28 17:24:19.000000000 +0200

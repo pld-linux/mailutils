@@ -1,0 +1,22 @@
+--- mailutils-3.9/libmu_cpp/body.cc.orig	2020-03-19 19:35:52.194901983 +0100
++++ mailutils-3.9/libmu_cpp/body.cc	2020-03-19 19:35:55.191552415 +0100
+@@ -66,7 +66,7 @@
+ {
+   mu_stream_t c_stream;
+ 
+-  int status = mu_body_get_stream (body, &c_stream);
++  int status = mu_body_get_streamref (body, &c_stream);
+   if (status)
+     throw Exception ("Body::get_stream", status);
+ 
+--- mailutils-3.9/libmu_cpp/message.cc.orig	2020-03-13 07:52:50.000000000 +0100
++++ mailutils-3.9/libmu_cpp/message.cc	2020-03-19 19:36:58.991206783 +0100
+@@ -118,7 +118,7 @@
+ {
+   mu_stream_t c_stream;
+ 
+-  int status = mu_message_get_stream (msg, &c_stream);
++  int status = mu_message_get_streamref (msg, &c_stream);
+   if (status)
+     throw Exception ("Message::get_stream", status);
+ 

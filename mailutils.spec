@@ -28,18 +28,19 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.8
+Version:	3.9
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	283f803ea2057d50ecabf9fd8de9b776
+# Source0-md5:	a357709d5f34b9acc6e16b7c10e77eaa
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
 Patch3:		%{name}-includes.patch
 Patch4:		%{name}-examples.patch
 Patch5:		%{name}-extern.patch
+Patch6:		%{name}-cpp.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
@@ -188,6 +189,7 @@ skrzynek pocztowych.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %{__rm} po/stamp-po
 
