@@ -41,6 +41,7 @@ Patch3:		%{name}-includes.patch
 Patch4:		%{name}-examples.patch
 Patch5:		%{name}-extern.patch
 Patch6:		%{name}-cpp.patch
+Patch7:		ggc10.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.11
@@ -190,6 +191,7 @@ skrzynek pocztowych.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %{__rm} po/stamp-po
 
