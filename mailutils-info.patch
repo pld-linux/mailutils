@@ -1,6 +1,6 @@
---- mailutils-3.1.1/doc/texinfo/mailutils.texi.orig	2017-02-09 19:09:55.552943040 +0100
-+++ mailutils-3.1.1/doc/texinfo/mailutils.texi	2017-02-09 19:12:11.392941490 +0100
-@@ -23,25 +23,22 @@
+--- mailutils-3.10/doc/texinfo/mailutils.texi.orig	2020-08-16 12:56:12.882265225 +0200
++++ mailutils-3.10/doc/texinfo/mailutils.texi	2020-08-16 13:07:41.878532612 +0200
+@@ -23,26 +23,23 @@
  @syncodeindex kw ky
  
  @ifinfo
@@ -21,23 +21,25 @@
 -* movemail: (mailutils) movemail.        Move Mail between Mailboxes.
 -* pop3d: (mailutils) pop3d.              POP3 Daemon.
 -* readmsg: (mailutils) readmsg.          Extract Messages from a Folder.
+-* decodemail: (mailutils) decodemail.    Decode MIME messages.
 -* sieve: (mailutils) sieve.              Mail Filtering Utility.
 -* mimeview: (mailutils) mimeview.        View MIME Messages.
 -* mailutils: (mailutils) mailutils.      Mailutils Multi-Purpose Tool
 +* Mailutils: (mailutils).		GNU Mail Utilities
-+* comsatd: (mailutils) comsatd.		Comsat Daemon
-+* frm: (mailutils) frm.			List Headers from a Mailbox
-+* guimb: (mailutils) guimb.		Mailbox Processing Language
-+* imap4d: (mailutils) imap4d.		IMAP4 Daemon
-+* mail: (mailutils) mail.		Send and Receive Mail
-+* maidag: (mailutils) maidag.		A General-Purpose Mail Delivery Agent
-+* messages: (mailutils) messages.	Count Messages in a Mailbox
-+* movemail: (mailutils) movemail.	Move Mail between Mailboxes
-+* pop3d: (mailutils) pop3d.		POP3 Daemon
-+* readmsg: (mailutils) readmsg.		Extract Messages from a Folder
-+* sieve: (mailutils) sieve.		Mail Filtering Utility
-+* mimeview: (mailutils) mimeview.	View MIME Messages
-+* mailutils: (mailutils) mailutils.	Mailutils Multi-Purpose Tool
++* comsatd: (mailutils)comsatd.		Comsat Daemon
++* frm: (mailutils)frm.			List Headers from a Mailbox
++* guimb: (mailutils)guimb.		Mailbox Processing Language
++* imap4d: (mailutils)imap4d.		IMAP4 Daemon
++* mail: (mailutils)mail.		Send and Receive Mail
++* maidag: (mailutils)maidag.		A General-Purpose Mail Delivery Agent
++* messages: (mailutils)messages.	Count Messages in a Mailbox
++* movemail: (mailutils)movemail.	Move Mail between Mailboxes
++* pop3d: (mailutils)pop3d.		POP3 Daemon
++* readmsg: (mailutils)readmsg.		Extract Messages from a Folder
++* decodemail: (mailutils)decodemail.	Decode MIME messages
++* sieve: (mailutils)sieve.		Mail Filtering Utility
++* mimeview: (mailutils)mimeview.	View MIME Messages
++* mailutils: (mailutils)mailutils.	Mailutils Multi-Purpose Tool
  @end direntry
  @end ifinfo
  

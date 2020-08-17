@@ -19,8 +19,6 @@
 %bcond_without	pgsql	# PostgreSQL module
 %bcond_without	odbc	# ODBC module (any variant)
 %bcond_with	iodbc	# ODBC module using libiodbc
-# broken code:
-%bcond_with	nntp	# NNTP support [broken in 3.x]
 #
 %if %{without odbc}
 %undefine	with_iodbc
@@ -28,12 +26,12 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.9
-Release:	2
+Version:	3.10
+Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	a357709d5f34b9acc6e16b7c10e77eaa
+# Source0-md5:	6564afb9a5d507d563d0832c6ea9fb3f
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
@@ -41,10 +39,10 @@ Patch3:		%{name}-includes.patch
 Patch4:		%{name}-examples.patch
 Patch5:		%{name}-extern.patch
 Patch6:		%{name}-cpp.patch
-Patch7:		ggc10.patch
+Patch7:		%{name}-sql-quota.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
-BuildRequires:	automake >= 1:1.11
+BuildRequires:	automake >= 1:1.15
 BuildRequires:	bison
 BuildRequires:	flex
 BuildRequires:	fribidi-devel
@@ -59,14 +57,14 @@ BuildRequires:	libltdl-devel
 BuildRequires:	libstdc++-devel
 %endif
 BuildRequires:	libwrap-devel
-BuildRequires:	libtool >= 2:1.5
+BuildRequires:	libtool >= 2:2.4.6
 BuildRequires:	libunistring-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	ncurses-devel
 %{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	pam-devel
 %{?with_pgsql:BuildRequires:	postgresql-devel}
-%{?with_python:BuildRequires:	python-devel >= 1:2.5}
+%{?with_python:BuildRequires:	python3-devel >= 1:3.2}
 BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.219
 BuildRequires:	tar >= 1:1.22
@@ -206,7 +204,6 @@ skrzynek pocztowych.
 	%{!?with_cxx:--disable-cxx} \
 	%{!?debug:--disable-debug} \
 	--enable-experimental \
-	%{!?with_nntp:--disable-nntp} \
 	%{!?with_python:--disable-python} \
 	%{?with_radius:--enable-radius} \
 	--disable-silent-rules \
@@ -231,7 +228,7 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/mailutils/*.{la,a}
-%{__rm} $RPM_BUILD_ROOT%{py_sitedir}/mailutils/c_api.{la,a}
+%{__rm} $RPM_BUILD_ROOT%{py3_sitedir}/mailutils/c_api.{la,a}
 
 %py_postclean
 
@@ -258,6 +255,7 @@ rm -rf $RPM_BUILD_ROOT
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog NEWS README THANKS TODO
+%attr(755,root,root) %{_bindir}/decodemail
 %attr(755,root,root) %{_bindir}/dotlock
 %attr(755,root,root) %{_bindir}/frm
 %attr(755,root,root) %{_bindir}/from
@@ -317,55 +315,52 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/guile/site/2.*/mailutils
 %endif
 %if %{with python}
-%dir %{py_sitedir}/mailutils
-%attr(755,root,root) %{py_sitedir}/mailutils/c_api.so
-%dir %{py_sitescriptdir}/mailutils
-%{py_sitescriptdir}/mailutils/*.py[co]
+%dir %{py3_sitedir}/mailutils
+%attr(755,root,root) %{py3_sitedir}/mailutils/c_api.so
+%dir %{py3_sitescriptdir}/mailutils
+%{py3_sitescriptdir}/mailutils/*.py
+%{py3_sitescriptdir}/mailutils/__pycache__
 %endif
 %{_infodir}/mailutils.info*
 
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libmailutils.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmailutils.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmailutils.so.7
 %attr(755,root,root) %{_libdir}/libmu_auth.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.7
 %if %{with cxx}
 %attr(755,root,root) %{_libdir}/libmu_cpp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.7
 %endif
 %attr(755,root,root) %{_libdir}/libmu_dbm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.7
 %attr(755,root,root) %{_libdir}/libmu_dotmail.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_dotmail.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_dotmail.so.7
 %attr(755,root,root) %{_libdir}/libmu_imap.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.7
 %attr(755,root,root) %{_libdir}/libmu_maildir.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_maildir.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_maildir.so.7
 %attr(755,root,root) %{_libdir}/libmu_mailer.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mailer.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_mailer.so.7
 %attr(755,root,root) %{_libdir}/libmu_mbox.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mbox.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_mbox.so.7
 %attr(755,root,root) %{_libdir}/libmu_mh.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mh.so.6
-%if %{with nntp}
-%attr(755,root,root) %{_libdir}/libmu_nntp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_nntp.so.6
-%endif
+%attr(755,root,root) %ghost %{_libdir}/libmu_mh.so.7
 %attr(755,root,root) %{_libdir}/libmu_pop.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_pop.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_pop.so.7
 %if %{with python}
 %attr(755,root,root) %{_libdir}/libmu_py.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_py.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_py.so.7
 %endif
 %if %{with guile}
 %attr(755,root,root) %{_libdir}/libmu_scm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_scm.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_scm.so.7
 %endif
 %attr(755,root,root) %{_libdir}/libmu_sieve.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.7
 %attr(755,root,root) %{_libdir}/libmuaux.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmuaux.so.6
+%attr(755,root,root) %ghost %{_libdir}/libmuaux.so.7
 %if %{with guile}
 %attr(755,root,root) %{_libdir}/libguile-mailutils-v-%{version}.so
 %endif
@@ -413,10 +408,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libmu_cpp.so
 %{_libdir}/libmu_cpp.la
 %endif
-%if %{with nntp}
-%attr(755,root,root) %{_libdir}/libmu_nntp.so
-%{_libdir}/libmu_nntp.la
-%endif
 %{_includedir}/mailutils
 %{_aclocaldir}/mailutils.m4
 
@@ -434,9 +425,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libmu_mailer.a
 %{_libdir}/libmu_mbox.a
 %{_libdir}/libmu_mh.a
-%if %{with nntp}
-%{_libdir}/libmu_nntp.a
-%endif
 %{_libdir}/libmu_pop.a
 %if %{with python}
 %{_libdir}/libmu_py.a

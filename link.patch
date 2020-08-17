@@ -1,11 +1,11 @@
---- mailutils-3.1.1/lib/Makefile.am.orig	2016-12-03 16:51:47.000000000 +0100
-+++ mailutils-3.1.1/lib/Makefile.am	2017-02-09 20:41:05.002880589 +0100
+--- mailutils-3.10/lib/Makefile.am.orig	2016-12-03 16:51:47.000000000 +0100
++++ mailutils-3.10/lib/Makefile.am	2017-02-09 20:41:05.002880589 +0100
 @@ -35,7 +35,7 @@
   strexit.c\
   mu_umaxtostr.c\
   mu_umaxtostr.h
 -libmuaux_la_LIBADD=gnu/libgnu.la
-+libmuaux_la_LIBADD=gnu/libgnu.la ../libmailutils/libmailutils.la
++libmuaux_la_LIBADD=gnu/libgnu.la ../libmailutils/libmailutils.la $(UNISTRING_LIBS)
  libmuaux_la_LDFLAGS = -version-info @VI_CURRENT@:@VI_REVISION@:@VI_AGE@
  
  libmutcpwrap_a_SOURCES = tcpwrap.c
@@ -38,29 +38,18 @@
 +libmu_cpp_la_LIBADD = $(top_builddir)/libmailutils/libmailutils.la $(top_builddir)/libmu_sieve/libmu_sieve.la $(top_builddir)/libproto/pop/libmu_pop.la $(MU_COMMON_LIBRARIES)
  libmu_cpp_la_LDFLAGS = -rpath $(libdir)  -version-info @VI_CURRENT@:@VI_REVISION@:@VI_AGE@
  
---- mailutils-3.5/Makefile.am.orig	2018-07-28 17:24:19.000000000 +0200
-+++ mailutils-3.5/Makefile.am	2018-10-30 21:05:45.491907245 +0100
-@@ -92,14 +92,12 @@
+--- mailutils-3.10/Makefile.am.orig	2020-08-16 13:08:00.601764513 +0200
++++ mailutils-3.10/Makefile.am	2020-08-16 13:15:53.622535272 +0200
+@@ -45,11 +45,11 @@
   libproto\
-  testsuite\
+  libtests\
   lib\
 - $(LIBMU_CPP_DIR)\
   $(GINT_DIR)\
   $(LIBMU_SCM_DIR)\
   $(LIBMU_DBM_DIR)\
   libmu_sieve\
-  python\
-  doc\
-- examples\
-  mu\
-  $(SCHEME_DIR)\
-  $(FRM_DIR)\
-@@ -109,6 +107,8 @@
-  $(MAIL_DIR)\
-  $(SIEVE_DIR)\
-  $(MESSAGES_DIR)\
 + $(LIBMU_CPP_DIR)\
-+ examples\
-  $(COMSAT_DIR)\
-  $(READMSG_DIR)\
-  $(DOTLOCK_DIR)\
+  $(PYTHON_DIR)\
+  doc\
+  examples\

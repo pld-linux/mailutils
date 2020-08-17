@@ -1,0 +1,16 @@
+--- mailutils-3.10/mda/lib/mailquota.c.orig	2020-08-08 22:32:07.000000000 +0200
++++ mailutils-3.10/mda/lib/mailquota.c	2020-08-16 21:38:28.339173150 +0200
+@@ -274,12 +274,8 @@
+ 	{
+ 	  char *p;
+ 	  
+-	  if (get_size (tmp, quota, &p))
+-	    {
+-	      mu_error (_("bogus mailbox quota for `%s' (near `%s')"),
+-			name, p);
++	  if (get_quota (quota, tmp))
+ 	      *quota = groupquota;
+-	    }
+ 	}
+     }
+   
