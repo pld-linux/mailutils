@@ -1,0 +1,8 @@
+--- mailutils-3.10/python/mailutils/Makefile.am.orig	2020-06-16 14:49:41.000000000 +0200
++++ mailutils-3.10/python/mailutils/Makefile.am	2020-08-22 09:00:28.379067903 +0200
+@@ -46,4 +46,4 @@
+ c_api_la_SOURCES = c_api.c
+ 
+ AM_CPPFLAGS = $(MU_LIB_COMMON_INCLUDES) @PYTHON_INCLUDES@\
+- -I$(top_srcdir)/python/$(PYTHON_MAJOR)/libmu_py
++ -I$(top_srcdir)/python/libmu_py
