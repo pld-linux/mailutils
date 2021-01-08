@@ -5,33 +5,48 @@
 # - dbm switches? (GDBM BDB NDBM TC KC)
 #
 # Conditional build:
-%bcond_without	gssapi	# GSSAPI authentication (krb5 or heimdal)
-%bcond_with	gss	# use GSS instead of MIT/Heimdal
-%bcond_without	ldap	# LDAP support
-%bcond_with	radius	# RADIUS support [requires gnu-radius, which is not ready for guile 2.x]
-%bcond_without	sasl	# without SASL (using GNU SASL)
+%bcond_without	gssapi		# GSSAPI authentication (gss/heimdal/krb5)
+%bcond_with	gss		# GSS for GSSAPI
+%bcond_without	heimdal		# Heimdal for GSSAPI
+%bcond_with	krb5		# MIT Kerberos for GSSAPI
+%bcond_without	ldap		# LDAP support
+%bcond_with	radius		# RADIUS support [requires gnu-radius, which is not ready for guile 2.x]
+%bcond_without	sasl		# without SASL (using GNU SASL)
 # language support
-%bcond_without	cxx	# C++ wrapper
-%bcond_without	guile	# Guile support
-%bcond_without	python	# Python support
+%bcond_without	cxx		# C++ wrapper
+%bcond_without	guile		# Guile support
+%bcond_without	python		# Python support
 # SQL:
-%bcond_without	mysql	# MySQL module
-%bcond_without	pgsql	# PostgreSQL module
-%bcond_without	odbc	# ODBC module (any variant)
-%bcond_with	iodbc	# ODBC module using libiodbc
+%bcond_without	mysql		# MySQL module
+%bcond_without	pgsql		# PostgreSQL module
+%bcond_without	odbc		# ODBC module (any variant)
+%bcond_with	iodbc		# ODBC module using libiodbc
+%bcond_without	unixodbc	# ODBC module using unixODBC
 #
+%if %{with iodbc}
+%undefine	with_unixodbc
+%endif
 %if %{without odbc}
 %undefine	with_iodbc
+%undefine	with_unixodbc
+%endif
+%if %{with gss} || %{with krb5}
+%undefine	with_heimdal
+%endif
+%if %{without gssapi}
+%undefine	with_gss
+%undefine	with_heimdal
+%undefine	with_krb5
 %endif
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.10
+Version:	3.11.1
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	6564afb9a5d507d563d0832c6ea9fb3f
+# Source0-md5:	8f3b72895ce74fb4262fc650080bb26b
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
@@ -39,7 +54,6 @@ Patch3:		%{name}-includes.patch
 Patch4:		%{name}-examples.patch
 Patch5:		%{name}-extern.patch
 Patch6:		%{name}-cpp.patch
-Patch7:		%{name}-sql-quota.patch
 Patch8:		%{name}-normalize.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
@@ -51,8 +65,11 @@ BuildRequires:	gettext-tools >= 0.19
 %{?with_radius:BuildRequires:	gnu-radius-devel >= 1.6}
 BuildRequires:	gnutls-devel >= 1.2.5
 %{?with_sasl:BuildRequires:	gsasl-devel >= 0.2.3}
+%{?with_gss:BuildRequires:	gss-devel >= 0.0.9}
 %{?with_guile:BuildRequires:	guile-devel >= 5:2.2.0}
-%{?with_odbc:%{?with_iodbc:BuildRequires:	libiodbc-devel}}
+%{?with_heimdal:BuildRequires:	heimdal-devel}
+%{?with_krb5:BuildRequires:	krb5-devel}
+%{?with_iodbc:BuildRequires:	libiodbc-devel}
 BuildRequires:	libltdl-devel
 %if %{with cxx}
 BuildRequires:	libstdc++-devel
@@ -70,15 +87,8 @@ BuildRequires:	readline-devel
 BuildRequires:	rpmbuild(macros) >= 1.219
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	texinfo
-%{?with_odbc:%{!?with_iodbc:BuildRequires:	unixODBC-devel}}
+%{?with_unixodbc:BuildRequires:	unixODBC-devel}
 BuildRequires:	xz
-%if %{with gssapi}
-%if %{with gss}
-BuildRequires:	gss-devel >= 0.0.9
-%else
-BuildRequires:	heimdal-devel
-%endif
-%endif
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	mailutils-doc
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -95,7 +105,7 @@ Narzędzia pocztowe z projektu GNU.
 %package libs
 Summary:	GNU mail utilities libraries
 Summary(pl.UTF-8):	Biblioteka narzędzi pocztowych GNU
-License:	LGPL
+License:	LGPL v3+
 Group:		Libraries
 Obsoletes:	libmailbox
 
@@ -114,7 +124,7 @@ przez SMP oraz /usr/sbin/sendmail.
 %package devel
 Summary:	Header files for GNU mail utilities libraries
 Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek narzędzi pocztowych GNU
-License:	LGPL
+License:	LGPL v3+
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	libmailbox-dev
@@ -128,7 +138,7 @@ Pliki nagłówkowe bibliotek narzędzi pocztowych GNU.
 %package static
 Summary:	GNU mail utilities static libraries
 Summary(pl.UTF-8):	Statyczne biblioteki narzędzi pocztowych GNU
-License:	LGPL
+License:	LGPL v3+
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
@@ -190,7 +200,6 @@ skrzynek pocztowych.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
-%patch7 -p1
 %patch8 -p1
 
 %{__rm} po/stamp-po
@@ -218,7 +227,7 @@ skrzynek pocztowych.
 	--with-mail-spool=/var/mail \
 	--with-mh-bindir=%{_libexecdir}/mu-mh \
 	%{?with_mysql:--with-mysql} \
-	%{?with_odbc:--with-odbc=%{?with_iodbc:iodbc}%{!?with_iodbc:odbc}} \
+	%{?with_odbc:--with-odbc=%{?with_iodbc:iodbc}%{?with_unixodbc:odbc}} \
 	%{?with_pgsql:--with-postgres}
 
 %{__make} -j1
@@ -328,41 +337,41 @@ rm -rf $RPM_BUILD_ROOT
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libmailutils.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmailutils.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmailutils.so.8
 %attr(755,root,root) %{_libdir}/libmu_auth.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.8
 %if %{with cxx}
 %attr(755,root,root) %{_libdir}/libmu_cpp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.8
 %endif
 %attr(755,root,root) %{_libdir}/libmu_dbm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.8
 %attr(755,root,root) %{_libdir}/libmu_dotmail.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_dotmail.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_dotmail.so.8
 %attr(755,root,root) %{_libdir}/libmu_imap.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.8
 %attr(755,root,root) %{_libdir}/libmu_maildir.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_maildir.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_maildir.so.8
 %attr(755,root,root) %{_libdir}/libmu_mailer.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mailer.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_mailer.so.8
 %attr(755,root,root) %{_libdir}/libmu_mbox.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mbox.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_mbox.so.8
 %attr(755,root,root) %{_libdir}/libmu_mh.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mh.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_mh.so.8
 %attr(755,root,root) %{_libdir}/libmu_pop.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_pop.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_pop.so.8
 %if %{with python}
 %attr(755,root,root) %{_libdir}/libmu_py.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_py.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_py.so.8
 %endif
 %if %{with guile}
 %attr(755,root,root) %{_libdir}/libmu_scm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_scm.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_scm.so.8
 %endif
 %attr(755,root,root) %{_libdir}/libmu_sieve.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.8
 %attr(755,root,root) %{_libdir}/libmuaux.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmuaux.so.7
+%attr(755,root,root) %ghost %{_libdir}/libmuaux.so.8
 %if %{with guile}
 %attr(755,root,root) %{_libdir}/libguile-mailutils-v-%{version}.so
 %endif
