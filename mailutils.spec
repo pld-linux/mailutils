@@ -41,12 +41,12 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.11.1
-Release:	2
+Version:	3.12
+Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	8f3b72895ce74fb4262fc650080bb26b
+# Source0-md5:	8e46c6a2e577bee4484c6ed47494255f
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
@@ -90,7 +90,7 @@ BuildRequires:	texinfo
 %{?with_unixodbc:BuildRequires:	unixODBC-devel}
 BuildRequires:	xz
 Requires:	%{name}-libs = %{version}-%{release}
-Obsoletes:	mailutils-doc
+Obsoletes:	mailutils-doc < 0.3.1
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # mailutils variant of traditional PREFIX/bin/mh dir (FHS disallows */bin subdir other than plain "mh")
@@ -107,7 +107,7 @@ Summary:	GNU mail utilities libraries
 Summary(pl.UTF-8):	Biblioteka narzędzi pocztowych GNU
 License:	LGPL v3+
 Group:		Libraries
-Obsoletes:	libmailbox
+Obsoletes:	libmailbox < 0.3.1
 
 %description libs
 The runtime library libmailbox. This library contains various mailbox
@@ -127,7 +127,7 @@ Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek narzędzi pocztowych GNU
 License:	LGPL v3+
 Group:		Development/Libraries
 Requires:	%{name}-libs = %{version}-%{release}
-Obsoletes:	libmailbox-dev
+Obsoletes:	libmailbox-dev < 0.3.1
 
 %description devel
 Header files for GNU mail utilities libraries.
