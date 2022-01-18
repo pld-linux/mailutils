@@ -41,12 +41,12 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.13
+Version:	3.14
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	4cc22e9298e61c10006ea9aa83a01df7
+# Source0-md5:	489599ff0d8993a4517936c862b99f02
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
@@ -70,7 +70,7 @@ BuildRequires:	gnutls-devel >= 1.2.5
 %{?with_heimdal:BuildRequires:	heimdal-devel}
 %{?with_krb5:BuildRequires:	krb5-devel}
 %{?with_iodbc:BuildRequires:	libiodbc-devel}
-BuildRequires:	libltdl-devel
+BuildRequires:	libltdl-devel >= 2:2.4.6
 %if %{with cxx}
 BuildRequires:	libstdc++-devel
 %endif
