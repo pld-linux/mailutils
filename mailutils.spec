@@ -42,7 +42,7 @@ Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
 Version:	3.14
-Release:	1
+Release:	2
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
@@ -323,7 +323,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/mailutils/*.so
 %{_datadir}/mailutils
 %if %{with guile}
-%{_datadir}/guile/site/2.*/mailutils
+%{_datadir}/guile/site/*.*/mailutils
 %endif
 %if %{with python}
 %dir %{py3_sitedir}/mailutils
