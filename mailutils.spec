@@ -5,6 +5,7 @@
 # - dbm switches? (GDBM BDB NDBM TC KC)
 #
 # Conditional build:
+%bcond_without	emacs		# Emacs support for mailutils
 %bcond_without	gssapi		# GSSAPI authentication (gss/heimdal/krb5)
 %bcond_with	gss		# GSS for GSSAPI
 %bcond_without	heimdal		# Heimdal for GSSAPI
@@ -42,7 +43,7 @@ Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
 Version:	3.15
-Release:	2
+Release:	3
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
@@ -59,6 +60,7 @@ URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.63
 BuildRequires:	automake >= 1:1.15
 BuildRequires:	bison
+%{?with_emacs:BuildRequires:	emacs}
 BuildRequires:	flex
 BuildRequires:	fribidi-devel
 BuildRequires:	gettext-tools >= 0.19
@@ -191,6 +193,19 @@ mailboxes.
 Demon GNU IMAP4. Wykorzystuje libmailbox do obsługi różnych rodzajów
 skrzynek pocztowych.
 
+%package -n emacs-mailutils
+Summary:	Emacs support for GNU mailutils
+Summary(pl.UTF-8):	Wsparcie dla GNU mailutils w Emacsie
+Group:		Applications/Editors
+Requires:	%{name} = %{version}-%{release}
+Requires:	emacs
+
+%description -n emacs-mailutils
+Emacs support for GNU mailutils.
+
+%description -n emacs-mailutils -l pl.UTF-8
+Wsparcie dla GNU mailutils w Emacsie.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -211,6 +226,7 @@ skrzynek pocztowych.
 %{__autoheader}
 %{__automake}
 %configure \
+	%{!?with_emacs:EMACS=no} \
 	%{!?with_gss:ac_cv_header_gss_h=no} \
 	%{!?with_cxx:--disable-cxx} \
 	%{!?debug:--disable-debug} \
@@ -462,3 +478,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/imap4d
 %{_mandir}/man1/imap4d.1*
+
+%if %{with emacs}
+%files -n emacs-mailutils
+%defattr(644,root,root,755)
+%{_emacs_lispdir}/mailutils-mh.el*
+%endif
