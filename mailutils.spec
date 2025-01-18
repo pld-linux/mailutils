@@ -12,7 +12,7 @@
 %bcond_with	krb5		# MIT Kerberos for GSSAPI
 %bcond_without	ldap		# LDAP support
 %bcond_with	radius		# RADIUS support [requires gnu-radius, which is not ready for guile 2.x]
-%bcond_without	sasl		# without SASL (using GNU SASL)
+%bcond_without	sasl		# SASL support (using GNU SASL)
 # language support
 %bcond_without	cxx		# C++ wrapper
 %bcond_without	guile		# Guile support
@@ -42,12 +42,12 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.17
+Version:	3.18
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	2df7bb7a076781a244635d311aac3f04
+# Source0-md5:	49455ab6eed04c368129bd6db34e2cfb
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
@@ -57,9 +57,10 @@ Patch5:		%{name}-extern.patch
 Patch6:		%{name}-cpp.patch
 Patch8:		%{name}-normalize.patch
 Patch9:		gcc14.patch
+Patch10:	%{name}-format.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
-BuildRequires:	autoconf >= 2.63
-BuildRequires:	automake >= 1:1.15
+BuildRequires:	autoconf >= 2.71
+BuildRequires:	automake >= 1:1.16.2
 BuildRequires:	bison
 %{?with_emacs:BuildRequires:	emacs}
 BuildRequires:	flex
@@ -73,12 +74,12 @@ BuildRequires:	gnutls-devel >= 1.2.5
 %{?with_heimdal:BuildRequires:	heimdal-devel}
 %{?with_krb5:BuildRequires:	krb5-devel}
 %{?with_iodbc:BuildRequires:	libiodbc-devel}
-BuildRequires:	libltdl-devel >= 2:2.4.6
+BuildRequires:	libltdl-devel >= 2:2.5.4
 %if %{with cxx}
 BuildRequires:	libstdc++-devel
 %endif
 BuildRequires:	libwrap-devel
-BuildRequires:	libtool >= 2:2.4.6
+BuildRequires:	libtool >= 2:2.5.4
 BuildRequires:	libunistring-devel
 %{?with_mysql:BuildRequires:	mysql-devel}
 BuildRequires:	ncurses-devel
@@ -209,15 +210,16 @@ Wsparcie dla GNU mailutils w Emacsie.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p0
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch8 -p1
-%patch9 -p1
+%patch -P0 -p1
+%patch -P1 -p0
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
+%patch -P8 -p1
+%patch -P9 -p1
+%patch -P10 -p1
 
 %{__rm} po/stamp-po
 

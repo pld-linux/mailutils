@@ -1,5 +1,5 @@
---- mailutils-3.8/libmailutils/wordsplit/wordsplit.h.orig	2019-07-23 06:36:52.000000000 +0200
-+++ mailutils-3.8/libmailutils/wordsplit/wordsplit.h	2019-11-08 21:28:14.865027949 +0100
+--- mailutils-3.18/libmailutils/wordsplit/wordsplit.h.orig	2024-10-30 13:28:24.000000000 +0100
++++ mailutils-3.18/libmailutils/wordsplit/wordsplit.h	2025-01-17 06:25:06.521202356 +0100
 @@ -19,6 +19,10 @@
  
  #include <stddef.h>
@@ -11,9 +11,9 @@
  typedef struct wordsplit wordsplit_t;
  
  /* Structure used to direct the splitting.  Members marked with [Input]
-@@ -303,4 +307,8 @@
+@@ -319,4 +323,8 @@ enum
  
- void wordsplit_clearerr (wordsplit_t *ws);
+ extern char const *wordsplit_escape[];
  
 +#ifdef __cplusplus
 +}
