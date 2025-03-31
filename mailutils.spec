@@ -86,9 +86,15 @@ BuildRequires:	ncurses-devel
 %{?with_ldap:BuildRequires:	openldap-devel}
 BuildRequires:	pam-devel
 %{?with_pgsql:BuildRequires:	postgresql-devel}
-%{?with_python:BuildRequires:	python3-devel >= 1:3.2}
+%if %{with python}
+BuildRequires:	python3-devel >= 1:3.2
+BuildRequires:	python3-modules >= 1:3.2
+%if %{_ver_ge %py3_ver 3.12}
+BuildRequires:	python3-setuptools
+%endif
+%endif
 BuildRequires:	readline-devel
-BuildRequires:	rpmbuild(macros) >= 1.219
+BuildRequires:	rpmbuild(macros) >= 1.750
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	texinfo
 %{?with_unixodbc:BuildRequires:	unixODBC-devel}
