@@ -42,12 +42,12 @@
 Summary:	GNU mail utilities
 Summary(pl.UTF-8):	Narzędzia pocztowe z projektu GNU
 Name:		mailutils
-Version:	3.19
+Version:	3.20
 Release:	1
 License:	GPL v3+
 Group:		Applications/Mail
 Source0:	https://ftp.gnu.org/gnu/mailutils/%{name}-%{version}.tar.xz
-# Source0-md5:	90a2dc98841703dee6316bc585100042
+# Source0-md5:	5bbb8109b67f2f29ec3e5e0b1313c9e0
 Patch0:		%{name}-info.patch
 Patch1:		%{name}-tinfo.patch
 Patch2:		link.patch
@@ -57,7 +57,6 @@ Patch5:		%{name}-extern.patch
 Patch6:		%{name}-cpp.patch
 Patch8:		%{name}-normalize.patch
 Patch9:		gcc14.patch
-Patch10:	%{name}-format.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.71
 BuildRequires:	automake >= 1:1.16.2
@@ -225,7 +224,6 @@ Wsparcie dla GNU mailutils w Emacsie.
 %patch -P6 -p1
 %patch -P8 -p1
 %patch -P9 -p1
-%patch -P10 -p1
 
 %{__rm} po/stamp-po
 
@@ -363,41 +361,41 @@ rm -rf $RPM_BUILD_ROOT
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libmailutils.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmailutils.so.9
+%ghost %{_libdir}/libmailutils.so.9
 %attr(755,root,root) %{_libdir}/libmu_auth.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_auth.so.9
+%ghost %{_libdir}/libmu_auth.so.9
 %if %{with cxx}
 %attr(755,root,root) %{_libdir}/libmu_cpp.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_cpp.so.9
+%ghost %{_libdir}/libmu_cpp.so.9
 %endif
 %attr(755,root,root) %{_libdir}/libmu_dbm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_dbm.so.9
+%ghost %{_libdir}/libmu_dbm.so.9
 %attr(755,root,root) %{_libdir}/libmu_dotmail.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_dotmail.so.9
+%ghost %{_libdir}/libmu_dotmail.so.9
 %attr(755,root,root) %{_libdir}/libmu_imap.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_imap.so.9
+%ghost %{_libdir}/libmu_imap.so.9
 %attr(755,root,root) %{_libdir}/libmu_maildir.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_maildir.so.9
+%ghost %{_libdir}/libmu_maildir.so.9
 %attr(755,root,root) %{_libdir}/libmu_mailer.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mailer.so.9
+%ghost %{_libdir}/libmu_mailer.so.9
 %attr(755,root,root) %{_libdir}/libmu_mbox.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mbox.so.9
+%ghost %{_libdir}/libmu_mbox.so.9
 %attr(755,root,root) %{_libdir}/libmu_mh.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_mh.so.9
+%ghost %{_libdir}/libmu_mh.so.9
 %attr(755,root,root) %{_libdir}/libmu_pop.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_pop.so.9
+%ghost %{_libdir}/libmu_pop.so.9
 %if %{with python}
 %attr(755,root,root) %{_libdir}/libmu_py.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_py.so.9
+%ghost %{_libdir}/libmu_py.so.9
 %endif
 %if %{with guile}
 %attr(755,root,root) %{_libdir}/libmu_scm.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_scm.so.9
+%ghost %{_libdir}/libmu_scm.so.9
 %endif
 %attr(755,root,root) %{_libdir}/libmu_sieve.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmu_sieve.so.9
+%ghost %{_libdir}/libmu_sieve.so.9
 %attr(755,root,root) %{_libdir}/libmuaux.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmuaux.so.9
+%ghost %{_libdir}/libmuaux.so.9
 %if %{with guile}
 %attr(755,root,root) %{_libdir}/libguile-mailutils-v-%{version}.so
 %endif
@@ -405,24 +403,24 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/mailutils-config
-%attr(755,root,root) %{_libdir}/libmailutils.so
-%attr(755,root,root) %{_libdir}/libmu_auth.so
-%attr(755,root,root) %{_libdir}/libmu_dbm.so
-%attr(755,root,root) %{_libdir}/libmu_dotmail.so
-%attr(755,root,root) %{_libdir}/libmu_imap.so
-%attr(755,root,root) %{_libdir}/libmu_maildir.so
-%attr(755,root,root) %{_libdir}/libmu_mailer.so
-%attr(755,root,root) %{_libdir}/libmu_mbox.so
-%attr(755,root,root) %{_libdir}/libmu_mh.so
-%attr(755,root,root) %{_libdir}/libmu_pop.so
+%{_libdir}/libmailutils.so
+%{_libdir}/libmu_auth.so
+%{_libdir}/libmu_dbm.so
+%{_libdir}/libmu_dotmail.so
+%{_libdir}/libmu_imap.so
+%{_libdir}/libmu_maildir.so
+%{_libdir}/libmu_mailer.so
+%{_libdir}/libmu_mbox.so
+%{_libdir}/libmu_mh.so
+%{_libdir}/libmu_pop.so
 %if %{with python}
-%attr(755,root,root) %{_libdir}/libmu_py.so
+%{_libdir}/libmu_py.so
 %endif
 %if %{with guile}
-%attr(755,root,root) %{_libdir}/libmu_scm.so
+%{_libdir}/libmu_scm.so
 %endif
-%attr(755,root,root) %{_libdir}/libmu_sieve.so
-%attr(755,root,root) %{_libdir}/libmuaux.so
+%{_libdir}/libmu_sieve.so
+%{_libdir}/libmuaux.so
 %{_libdir}/libmailutils.la
 %{_libdir}/libmu_auth.la
 %{_libdir}/libmu_dbm.la
@@ -442,7 +440,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libmu_sieve.la
 %{_libdir}/libmuaux.la
 %if %{with cxx}
-%attr(755,root,root) %{_libdir}/libmu_cpp.so
+%{_libdir}/libmu_cpp.so
 %{_libdir}/libmu_cpp.la
 %endif
 %{_includedir}/mailutils
