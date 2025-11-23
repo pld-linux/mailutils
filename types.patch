@@ -1,0 +1,31 @@
+--- mailutils-3.20/libmailutils/mailer/progmailer.c.orig	2025-01-02 14:36:32.000000000 +0100
++++ mailutils-3.20/libmailutils/mailer/progmailer.c	2025-11-23 21:46:28.651920752 +0100
+@@ -45,7 +45,7 @@
+ {
+   int fd;
+   pid_t pid;
+-  void (*sighandler)();
++  void (*sighandler)(int);
+   char *command;
+ };
+ 
+--- mailutils-3.20/mh/scan.c.orig	2025-01-02 14:36:43.000000000 +0100
++++ mailutils-3.20/mh/scan.c	2025-11-23 23:14:23.727825266 +0100
+@@ -173,7 +173,7 @@
+ #ifdef HAVE_TERMCAP_H
+ /* A subroutine for tputs */
+ int
+-putstdout(char c)
++putstdout(int c)
+ {
+   return putc(c, stdout);
+ }
+@@ -200,7 +200,7 @@
+ 	      char *clr = tgetstr ("cl", &buffer);
+ 	      if (clr)
+ 		{
+-		  tputs(clr, 1, (int (*)())putstdout);
++		  tputs(clr, 1, putstdout);
+ 		  return;
+ 		}
+ 	    }

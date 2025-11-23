@@ -57,6 +57,7 @@ Patch5:		%{name}-extern.patch
 Patch6:		%{name}-cpp.patch
 Patch8:		%{name}-normalize.patch
 Patch9:		gcc14.patch
+Patch10:	types.patch
 URL:		http://www.gnu.org/software/mailutils/mailutils.html
 BuildRequires:	autoconf >= 2.71
 BuildRequires:	automake >= 1:1.16.2
@@ -224,6 +225,7 @@ Wsparcie dla GNU mailutils w Emacsie.
 %patch -P6 -p1
 %patch -P8 -p1
 %patch -P9 -p1
+%patch -P10 -p1
 
 %{__rm} po/stamp-po
 
